@@ -1,11 +1,16 @@
 import express from 'express'
 
 import { getTeams, getTeam, createTeam, 
-         getEmployees, getEmployee, createEmployee, getTasks, getTask, createTask } from './server.js'
+         getEmployees, getEmployee, createEmployee, 
+         getTasks, getTask, createTask, 
+         getProjects, getProject, createProject, 
+         getTeamMembers, getTeamMember, createTeamMember } from './server.js'
 
 const app = express()
 
 app.use(express.json())
+
+// TEAM REQUESTS
 
 app.get("/teams", async (req, res) => {
     const teams = await getTeams()
@@ -24,6 +29,9 @@ app.post("/teams", async (req, res) => {
     res.status(201).send(team)
 })
 
+////////////////////////////////////////////
+// EMPLOYEE REQUESTS
+
 app.get("/employees", async (req, res) => {
     const employees = await getEmployees()
     res.send(employees)
@@ -40,6 +48,9 @@ app.post("/employees", async (req, res) => {
     const employee = await createEmployee(name, lastname, position, email)
     res.status(201).send(employee)
 })
+
+////////////////////////////////////////////
+// TASK REQUESTS
 
 app.get("/tasks", async (req, res) => {
     const tasks = await getTasks()
@@ -58,10 +69,56 @@ app.post("/tasks", async (req, res) => {
     res.status(201).send(task)
 })
 
+////////////////////////////////////////////
+// PROJECT REQUESTS
+
+app.get("/projects", async (req, res) => {
+    const projects = await getProjects()
+    res.send(projects)
+})
+
+app.get("/projects/:id", async (req, res) => {
+    const id = req.params.id
+    const project = await getProject(id)
+    res.send(project)
+})
+
+app.post("/projects", async (req, res) => {
+    const { name, start_date, end_date, status, description } = req.body
+    const project = await createProject(name, start_date, end_date, status, description)
+    res.status(201).send(project)
+})
+
+////////////////////////////////////////////
+// TEAM MEMBER REQUESTS
+
+app.get("/teammembers", async (req, res) => {
+    const members = await getTeamMembers()
+    res.send(members)
+})
+
+app.get("/teammembers/:id", async (req, res) => {
+    const id = req.params.id
+    const member = await getTeamMember(id)
+    res.send(member)
+})
+
+app.post("/teammembers", async (req, res) => {
+    const { team_id, employee_id } = req.body
+    const member = await createTeamMember(team_id, employee_id)
+    res.status(201).send(member)
+})
+
+////////////////////////////////////////////
+// ERROR HANDLING
+
 app.use((err, req, res, next) => {
     console.error(err.stack)
     res.status(500).send('Something broke')
 })
+
+////////////////////////////////////////////
+// CONNECTION TO PORT ANNOUNCEMENT
 
 app.listen(8080, () => {
     console.log('Server is running on port 8080')
