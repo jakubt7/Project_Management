@@ -1,0 +1,13 @@
+.home {
+    display: flex;
+
+    .mainContainer {
+        flex: 6;
+
+        .graphs {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+    }
+}
