@@ -1,12 +1,20 @@
 import express from 'express'
+import cors from 'cors';
 
 import { getTeams, getTeam, createTeam, 
-         getEmployees, getEmployee, createEmployee, 
+         getEmployees, getEmployee, createEmployee, deleteEmployee, 
          getTasks, getTask, createTask, 
          getProjects, getProject, createProject, 
          getTeamMembers, getTeamMember, createTeamMember } from './server.js'
 
 const app = express()
+
+// CORS ORIGIN PASS
+const corsOptions = {
+    origin: 'http://localhost:5173',
+  };
+  
+app.use(cors(corsOptions));
 
 app.use(express.json())
 
@@ -48,6 +56,16 @@ app.post("/employees", async (req, res) => {
     const employee = await createEmployee(name, lastname, position, email)
     res.status(201).send(employee)
 })
+
+app.delete("/employees/delete/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+      await deleteEmployee(id);
+      res.sendStatus(204);
+    } catch (error) {
+      res.status(500).send({ error: "Failed to delete employee." });
+    }
+  });  
 
 ////////////////////////////////////////////
 // TASK REQUESTS

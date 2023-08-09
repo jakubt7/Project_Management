@@ -63,6 +63,15 @@ export async function createEmployee(name, lastname, position, email){
     return result.insertId
 }
 
+export async function deleteEmployee(employeeId) {
+    const [result] = await pool.query(`
+        DELETE FROM Employees
+        WHERE employee_id = ?
+      `, [employeeId]);
+  
+    return result.affectedRows === 1; 
+}
+
 ////////////////////////////////////////////
 // TASK REQUESTS
 

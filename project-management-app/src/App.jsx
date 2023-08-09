@@ -4,6 +4,7 @@ import Home from "./pages/Home/Home";
 import LoginPage from './pages/LoginPage/LoginPage';
 import CreateEmployee from './pages/CreateEmployee/CreateEmployee';
 import Employees from './pages/Employees/Employees';
+import EmployeeDetails from './components/EmployeeDetails/EmployeeDetails';
 import Projects from './pages/Projects/Projects';
 import CreateProject from './pages/CreateProject/CreateProject';
 import Tasks from './pages/Tasks/Tasks';
@@ -20,6 +21,7 @@ function App() {
             <Route path="/login" element={<LoginPage/>} />
             <Route path="/employees" element={<Employees/>} />
             <Route path="/employees/create" element={<CreateEmployee/>} />
+            <Route path="/employees/:empId" element={<EmployeeDetails/>} />
             <Route path="/projects" element={<Projects/>} />
             <Route path="/projects/create" element={<CreateProject/>} />
             <Route path="/tasks" element={<Tasks/>} />
