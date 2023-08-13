@@ -5,7 +5,7 @@ import { getTeams, getTeam, createTeam,
          getEmployees, getEmployee, createEmployee, deleteEmployee, 
          getTasks, getTask, createTask, 
          getProjects, getProject, createProject, 
-         getTeamMembers, getTeamMember, createTeamMember } from './server.js'
+         getTeamMembers, getTeamMember, createTeamMember, deleteProject } from './server.js'
 
 const app = express()
 
@@ -106,6 +106,16 @@ app.post("/projects", async (req, res) => {
     const project = await createProject(name, start_date, end_date, status, description)
     res.status(201).send(project)
 })
+
+app.delete("/projects/delete/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+      await deleteProject(id);
+      res.sendStatus(204);
+    } catch (error) {
+      res.status(500).send({ error: "Failed to delete employee." });
+    }
+});  
 
 ////////////////////////////////////////////
 // TEAM MEMBER REQUESTS

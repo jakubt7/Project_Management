@@ -124,6 +124,15 @@ export async function createProject(name, start_date, end_date, status, descript
     return result.insertId
 }
 
+export async function deleteProject(projectId) {
+    const [result] = await pool.query(`
+        DELETE FROM Projects
+        WHERE project_id = ?
+      `, [projectId]);
+  
+    return result.affectedRows === 1; 
+}
+
 ////////////////////////////////////////////
 // TEAM MEMBER REQUESTS
 

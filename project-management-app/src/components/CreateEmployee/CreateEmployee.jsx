@@ -1,12 +1,9 @@
 import React, { useRef, useState } from "react";
 import "./CreateEmployee.scss";
-import Sidebar from "../../components/Sidebar/Sidebar";
-import Navbar from "../../components/Navbar/Navbar";
-import { useNavigate } from "react-router-dom";
+import Sidebar from "../Sidebar/Sidebar";
+import Navbar from "../Navbar/Navbar";
 
 const CreateEmployee = () => {
-  
-
   const firstNameRef = useRef();
   const lastNameRef = useRef();
   const positionRef = useRef();

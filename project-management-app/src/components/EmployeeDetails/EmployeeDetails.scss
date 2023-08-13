@@ -4,7 +4,17 @@
 
     .detailsContainer {
         flex: 6;
+
+        .employeeInfo {
+            border: 1px solid black;
+        }
+
+        .employeeTasks {
+            display: flex;
+            border: 1px solid black;
+        }
     }
+
 
 
 

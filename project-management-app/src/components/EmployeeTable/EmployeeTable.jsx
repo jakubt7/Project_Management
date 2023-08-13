@@ -11,6 +11,7 @@ const EmployeeTable = () => {
         const employeesData = await fetch("http://localhost:8080/employees");
 
         if (!employeesData.ok) {
+            console.log("There was an error fetching from the API")
         } else {
           const data = await employeesData.json();
           setData(data);
@@ -39,6 +40,7 @@ const EmployeeTable = () => {
         if (response.ok) {
           console.log("Employee deleted successfully");
         } else {
+          console.log("Error encountered while deleting employee")
         }
       } catch (error) {
         console.error(error.message);
@@ -70,8 +72,8 @@ const EmployeeTable = () => {
       <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Last Name</th>
+            <th>First name</th>
+            <th>Last name</th>
             <th>Position</th>
             <th>Email</th>
             <th>Details</th>
