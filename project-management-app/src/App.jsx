@@ -2,15 +2,16 @@ import { Route, Routes, BrowserRouter} from 'react-router-dom'
 import './App.css'
 import Home from "./pages/Home/Home";
 import LoginPage from './pages/LoginPage/LoginPage';
-import CreateEmployee from './components/CreateEmployee/CreateEmployee';
+import CreateEmployee from './components/EmployeeComponents/CreateEmployee/CreateEmployee';
 import Employees from './pages/Employees/Employees';
-import EmployeeDetails from './components/EmployeeDetails/EmployeeDetails';
+import EmployeeDetails from './components/EmployeeComponents/EmployeeDetails/EmployeeDetails';
 import Projects from './pages/Projects/Projects';
-import CreateProject from './components/CreateProject/CreateProject';
+import CreateProject from './components/ProjectComponents/CreateProject/CreateProject';
 import Tasks from './pages/Tasks/Tasks';
 import CreateTask from './pages/CreateTask/CreateTask';
 import Teams from './pages/Teams/Teams';
 import CreateTeam from './pages/CreateTeam/CreateTeam';
+import TeamMembers from './components/TeamComponents/TeamMembers/TeamMembers';
 
 
 
@@ -29,6 +30,7 @@ function App() {
             <Route path="/tasks/create" element={<CreateTask/>} />
             <Route path="/teams" element={<Teams/>} />
             <Route path="/teams/create" element={<CreateTeam/>} />
+            <Route path="/teams/:teamId" element={<TeamMembers/>} />
           </Routes>
       </BrowserRouter>
   )

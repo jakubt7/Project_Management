@@ -2,7 +2,7 @@ import React from 'react'
 import './Projects.scss'
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Navbar from '../../components/Navbar/Navbar';
-import ProjectTable from '../../components/ProjectTable/ProjectTable';
+import ProjectTable from '../../components/ProjectComponents/ProjectTable/ProjectTable';
 
 function Projects() {
     return (

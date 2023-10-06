@@ -90,6 +90,9 @@ const EmployeeTable = () => {
                 <Link to={`/employees/${employee.employee_id}`}>
                     <button>More</button>
                 </Link>
+                <button>
+                  Edit
+                </button>
                 <button onClick={() => handleDelete(employee.employee_id)}>
                   Delete
                 </button>

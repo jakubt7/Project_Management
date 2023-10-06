@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import './CreateProject.scss';
-import Sidebar from "../../components/Sidebar/Sidebar";
-import Navbar from "../../components/Navbar/Navbar";
+import Sidebar from "../../Sidebar/Sidebar";
+import Navbar from "../../Navbar/Navbar";
 
 function CreateProject() {
   const nameRef = useRef();

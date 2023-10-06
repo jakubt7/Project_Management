@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./EmployeeDetails.scss";
-import Sidebar from "../Sidebar/Sidebar";
-import Navbar from "../Navbar/Navbar";
+import Sidebar from "../../Sidebar/Sidebar";
+import Navbar from "../../Navbar/Navbar";
 import { useParams } from "react-router-dom";
 
 const EmployeeDetails = () => {
@@ -60,6 +60,19 @@ const EmployeeDetails = () => {
         </div>
         <div className="employeeTasks">
           <h2>Assigned tasks</h2>
+          <div className="employeeInfo">
+        <img
+          src="https://via.placeholder.com/150" // Placeholder image URL
+          alt={`${employee_name} ${employee_lastname}`}
+          className="employee-image"
+        />
+          <h2>
+            {employee_name} {employee_lastname}
+          </h2>
+          <p>Position: {getPositionName(employee_position)}</p>
+          <p>Email: {employee_email}</p>
+        </div>
+
         </div>
       </div>
     </div>

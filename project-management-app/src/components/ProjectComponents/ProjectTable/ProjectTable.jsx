@@ -97,6 +97,9 @@ const ProjectTable = () => {
                   <Link to={`/`}>
                       <button>More</button>
                   </Link>
+                  <button>
+                  Edit
+                </button>
                   <button onClick={() => handleDelete(project.project_id)}>
                     Delete
                   </button>

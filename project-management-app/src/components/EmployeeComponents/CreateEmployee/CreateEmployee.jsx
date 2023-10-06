@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import "./CreateEmployee.scss";
-import Sidebar from "../Sidebar/Sidebar";
-import Navbar from "../Navbar/Navbar";
+import Sidebar from "../../Sidebar/Sidebar";
+import Navbar from "../../Navbar/Navbar";
 
 const CreateEmployee = () => {
   const firstNameRef = useRef();
