@@ -12,6 +12,7 @@ import CreateTask from './pages/CreateTask/CreateTask';
 import Teams from './pages/Teams/Teams';
 import CreateTeam from './pages/CreateTeam/CreateTeam';
 import TeamMembers from './components/TeamComponents/TeamMembers/TeamMembers';
+import TaskDetails from './components/TaskComponents/TaskDetails/TaskDetails';
 
 
 
@@ -28,6 +29,7 @@ function App() {
             <Route path="/projects/create" element={<CreateProject />} />
             <Route path="/tasks" element={<Tasks/>} />
             <Route path="/tasks/create" element={<CreateTask/>} />
+            <Route path="/tasks/:taskId" element={<TaskDetails/>} />
             <Route path="/teams" element={<Teams/>} />
             <Route path="/teams/create" element={<CreateTeam/>} />
             <Route path="/teams/:teamId" element={<TeamMembers/>} />

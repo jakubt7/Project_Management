@@ -17,8 +17,10 @@ const TeamMembers = () => {
 
         if (!teamsData.ok) {
         } else {
-          const data = await teamsData.json();
-          setData(data);
+          const responseData = await teamsData.json();
+          // Ensure responseData is an array, or convert it into an array if it's an object.
+          const dataArray = Array.isArray(responseData) ? responseData : [responseData];
+          setData(dataArray);
         }
       } catch (error) {
         console.error(error.message);
