@@ -38,7 +38,7 @@ const TeamList = () => {
             key={team.team_id}
             className="w-1/2 md:w-1/5 p-2"
           >
-            <div className="bg-slate-50 rounded-xl p-4 light:bg-slate-800">
+            <div className="bg-slate-50 rounded-xl p-20 light:bg-slate-800">
               <img
                 src="https://picsum.photos//150/150"
                 alt={`${team.team_name}`}

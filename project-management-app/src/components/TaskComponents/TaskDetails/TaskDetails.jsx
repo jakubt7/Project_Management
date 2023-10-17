@@ -17,6 +17,7 @@ const TaskDetails = () => {
         } else {
           const data = await taskData.json();
           setData(data);
+          console.log(data);
         }
       } catch (error) {
         console.error(error.message);
@@ -24,6 +25,8 @@ const TaskDetails = () => {
     }
     fetchData();
   }, [taskId]);
+
+
 
   const {
     task_name,
@@ -34,6 +37,7 @@ const TaskDetails = () => {
     status,
     start_date,
     end_date,
+    employee_id
   } = data;
 
   return (
@@ -52,6 +56,7 @@ const TaskDetails = () => {
             <div>{status}</div>
             <div>{start_date}</div>
             <div>{end_date}</div>
+            <div>{employee_id}</div>
           </div>
         </div>
       </div>

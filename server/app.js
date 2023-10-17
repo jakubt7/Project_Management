@@ -5,7 +5,7 @@ import { getTeams, getTeam, createTeam,
          getEmployees, getEmployee, createEmployee, deleteEmployee, 
          getTasks, getTask, createTask, 
          getProjects, getProject, createProject, 
-         getTeamMembers, getTeamMember, createTeamMember, deleteProject } from './server.js'
+         getTeamMembers, getTeamMember, createTeamMember, deleteProject, getEmployeeTasks, getEmployeeTeamMembership } from './server.js'
 
 const app = express()
 
@@ -51,6 +51,12 @@ app.get("/employees/:id", async (req, res) => {
     res.send(employee)
 })
 
+app.get("/employees/tasks/:id", async (req, res) => {
+    const id = req.params.id
+    const task = await getEmployeeTasks(id)
+    res.send(task)
+})
+
 app.post("/employees", async (req, res) => {
     const { name, lastname, position, email } = req.body
     const employee = await createEmployee(name, lastname, position, email)
@@ -63,7 +69,7 @@ app.delete("/employees/delete/:id", async (req, res) => {
       await deleteEmployee(id);
       res.sendStatus(204);
     } catch (error) {
-      res.status(500).send({ error: "Failed to delete employee." });
+      res.status(500).send({ error: "Failed to delete employee.", message: error.message });
     }
   });  
 
@@ -128,6 +134,12 @@ app.get("/teammembers", async (req, res) => {
 app.get("/teammembers/:id", async (req, res) => {
     const id = req.params.id
     const member = await getTeamMember(id)
+    res.send(member)
+})
+
+app.get("/employees/teammembers/:id", async (req, res) => {
+    const id = req.params.id
+    const member = await getEmployeeTeamMembership(id)
     res.send(member)
 })
 

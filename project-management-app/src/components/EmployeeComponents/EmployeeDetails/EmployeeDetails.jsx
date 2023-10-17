@@ -6,28 +6,69 @@ import { useParams } from "react-router-dom";
 
 const EmployeeDetails = () => {
   const { empId } = useParams();
-  const [data, setData] = useState([]);
+  const [employeeData, setEmployeeData] = useState([]);
+  const [tasksData, setTasksData] = useState([]);
+  const [teamsData, setTeamsData] = useState([]);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchEmployeeData() {
       try {
         const employeesData = await fetch(
           `http://localhost:8080/employees/${empId}`
         );
-
         if (!employeesData.ok) {
         } else {
           const data = await employeesData.json();
-          setData(data);
+          setEmployeeData(data);
         }
       } catch (error) {
         console.error(error.message);
       }
     }
-    fetchData();
+
+    async function fetchTasksData() {
+      try {
+        const tasksData = await fetch(
+          `http://localhost:8080/employees/tasks/${empId}`
+        );
+        if (!tasksData.ok) {
+        } else {
+          const data = await tasksData.json();
+          setTasksData(data);
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    async function fetchTeamsData() {
+      try {
+        const teamsData = await fetch(
+          `http://localhost:8080/employees/teammembers/${empId}`
+        );
+        if (!teamsData.ok) {
+        } else {
+          const data = await teamsData.json();
+          setTeamsData(data);
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    fetchEmployeeData();
+    fetchTasksData();
+    fetchTeamsData();
   }, [empId]);
 
-  const { employee_name, employee_lastname, employee_position, employee_email } = data;
+
+  const {
+    employee_name,
+    employee_lastname,
+    employee_position,
+    employee_email,
+  } = employeeData;
+
 
   const getPositionName = (positionId) => {
     const positions = [
@@ -40,18 +81,17 @@ const EmployeeDetails = () => {
     return position ? position.name : "Unknown Position";
   };
 
-
   return (
     <div className="employeeDetails">
       <Sidebar />
       <div className="detailsContainer">
         <Navbar />
         <div className="employeeInfo">
-        <img
-          src="https://via.placeholder.com/150" // Placeholder image URL
-          alt={`${employee_name} ${employee_lastname}`}
-          className="employee-image"
-        />
+          <img
+            src="https://via.placeholder.com/150"
+            alt={`${employee_name} ${employee_lastname}`}
+            className="employee-image"
+          />
           <h2>
             {employee_name} {employee_lastname}
           </h2>
@@ -60,20 +100,21 @@ const EmployeeDetails = () => {
         </div>
         <div className="employeeTasks">
           <h2>Assigned tasks</h2>
-          <div className="employeeInfo">
-        <img
-          src="https://via.placeholder.com/150" // Placeholder image URL
-          alt={`${employee_name} ${employee_lastname}`}
-          className="employee-image"
-        />
-          <h2>
-            {employee_name} {employee_lastname}
-          </h2>
-          <p>Position: {getPositionName(employee_position)}</p>
-          <p>Email: {employee_email}</p>
-        </div>
-
-        </div>
+          <ul>
+            {tasksData.map((task) => (
+              <li key={task.task_id}>{task.task_name}</li>
+            ))}
+          </ul>
+          </div>
+          <div className="employeeTeams">
+          <h2>Assigned teams</h2>
+          <ul>
+            {teamsData.map((team) => (
+              <li key={team.team_id}>{team.team_name}</li>
+            ))}
+          </ul>
+          </div>
+        
       </div>
     </div>
   );

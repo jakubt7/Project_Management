@@ -18,7 +18,7 @@ const TeamMembers = () => {
         if (!teamsData.ok) {
         } else {
           const responseData = await teamsData.json();
-          // Ensure responseData is an array, or convert it into an array if it's an object.
+        
           const dataArray = Array.isArray(responseData) ? responseData : [responseData];
           setData(dataArray);
         }
@@ -36,6 +36,7 @@ const TeamMembers = () => {
       <div className="membersContainer">
         <Navbar />
         <div className="membersList">
+          <h2>Team Members</h2>
             <ul>
             {data.map((member) => (
             <li key={member.team_member_id}>

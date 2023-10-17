@@ -26,7 +26,7 @@ const EmployeeTable = () => {
   const handleDelete = async (id) => {
     if (
       confirm(
-        "Deleting this employee is irreversible. Do you want to cofirm the deletion?"
+        "Deleting this employee is irreversible. Do you want to confirm the deletion?"
       ) == true
     ) {
       try {

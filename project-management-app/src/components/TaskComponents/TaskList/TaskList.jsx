@@ -31,19 +31,14 @@ const TaskList = () => {
             Add Task
           </Link>
         </div>
-        <div className="flex flex-wrap">
+        <div>
           {data.map((task) => (
             <Link
               to={`/tasks/${task.task_id}`}
               key={task.task_id}
-              className="w-1/2 md:w-1/5 p-2"
+              className="w-1/2 md:w-1/5 p-1"
             >
-              <div className="bg-slate-50 rounded-xl p-4 light:bg-slate-800">
-                <img
-                  src="https://picsum.photos//150/150"
-                  alt={`${task.task_name}`}
-                  className="team-image w-20 h-20 mx-auto mb-2"
-                />
+              <div className="bg-slate-50 rounded-xl p-3 bg-slate-300">
                 <div className="text-center">
                   <div className="font-medium">
                     <div className="text-slate-950 dark:text-slate-950">
