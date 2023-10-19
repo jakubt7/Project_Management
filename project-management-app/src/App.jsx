@@ -13,6 +13,7 @@ import Teams from './pages/Teams/Teams';
 import CreateTeam from './pages/CreateTeam/CreateTeam';
 import TeamMembers from './components/TeamComponents/TeamMembers/TeamMembers';
 import TaskDetails from './components/TaskComponents/TaskDetails/TaskDetails';
+import ProjectDetails from './components/ProjectComponents/ProjectDetails/ProjectDetails';
 
 
 
@@ -26,6 +27,7 @@ function App() {
             <Route path="/employees/create" element={<CreateEmployee/>} />
             <Route path="/employees/:empId" element={<EmployeeDetails/>} />
             <Route path="/projects" element={<Projects/>} />
+            <Route path="/projects/:projectId" element={<ProjectDetails/>} />
             <Route path="/projects/create" element={<CreateProject />} />
             <Route path="/tasks" element={<Tasks/>} />
             <Route path="/tasks/create" element={<CreateTask/>} />

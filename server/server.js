@@ -49,8 +49,10 @@ export async function createTeam(name) {
 
 export async function getEmployees() {
   const [rows] = await pool.query(`
-    SELECT * 
-    FROM Employees`);
+  SELECT * 
+  FROM Employees 
+  INNER JOIN employeepositions 
+  ON employees.employee_position = employeepositions.employee_position_id`);
   return rows;
 }
 
@@ -59,6 +61,8 @@ export async function getEmployee(id) {
     `
     SELECT * 
     FROM Employees 
+    INNER JOIN employeepositions 
+    ON employees.employee_position = employeepositions.employee_position_id
     WHERE employee_id = ?`,
     [id]
   );
@@ -157,7 +161,9 @@ export async function createTask(
 export async function getProjects() {
   const [rows] = await pool.query(`
     SELECT * 
-    FROM Projects`);
+    FROM Projects
+    INNER JOIN ProjectStatus
+    ON Projects.project_status = ProjectStatus.project_status_id`);
   return rows;
 }
 
@@ -165,11 +171,35 @@ export async function getProject(id) {
   const [rows] = await pool.query(
     `
     SELECT * 
-    FROM Projects 
+    FROM Projects
+    INNER JOIN ProjectStatus
+    ON Projects.project_status = ProjectStatus.project_status_id 
     WHERE project_id = ?`,
     [id]
   );
   return rows[0];
+}
+
+export async function getProjectTasks(id) {
+  const [rows] = await pool.query(
+    `
+    SELECT * 
+    FROM Tasks 
+    WHERE project_id = ? `,
+    [id]
+  );
+  return rows;
+}
+
+export async function getProjectTeams(id) {
+  const [rows] = await pool.query(
+    `
+    SELECT * 
+    FROM TeamMembers 
+    WHERE project_id = ? `,
+    [id]
+  );
+  return rows;
 }
 
 export async function createProject(
@@ -232,6 +262,7 @@ export async function getEmployeeTeamMembership(id) {
   );
   return rows;
 }
+
 
 export async function createTeamMember(team_id, employee_id) {
   const [result] = await pool.query(

@@ -5,7 +5,7 @@ import { getTeams, getTeam, createTeam,
          getEmployees, getEmployee, createEmployee, deleteEmployee, 
          getTasks, getTask, createTask, 
          getProjects, getProject, createProject, 
-         getTeamMembers, getTeamMember, createTeamMember, deleteProject, getEmployeeTasks, getEmployeeTeamMembership } from './server.js'
+         getTeamMembers, getTeamMember, createTeamMember, deleteProject, getEmployeeTasks, getEmployeeTeamMembership, getProjectTasks, getProjectTeams } from './server.js'
 
 const app = express()
 
@@ -104,6 +104,18 @@ app.get("/projects", async (req, res) => {
 app.get("/projects/:id", async (req, res) => {
     const id = req.params.id
     const project = await getProject(id)
+    res.send(project)
+})
+
+app.get("/projects/tasks/:id", async (req, res) => {
+    const id = req.params.id
+    const project = await getProjectTasks(id)
+    res.send(project)
+})
+
+app.get("/projects/teams/:id", async (req, res) => {
+    const id = req.params.id
+    const project = await getProjectTeams(id)
     res.send(project)
 })
 

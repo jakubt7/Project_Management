@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from "react";
-import "./EmployeeDetails.scss";
+import React, {useState, useEffect} from 'react'
+import './ProjectDetails.scss'
 import Sidebar from "../../Sidebar/Sidebar";
 import Navbar from "../../Navbar/Navbar";
 import { useParams } from "react-router-dom";
 
-const EmployeeDetails = () => {
-  const { empId } = useParams();
-  const [employeeData, setEmployeeData] = useState([]);
+const ProjectDetails = () => {
+  const { projectId } = useParams();
+  const [projectData, setProjectData] = useState([]);
   const [tasksData, setTasksData] = useState([]);
   const [teamsData, setTeamsData] = useState([]);
 
   useEffect(() => {
-    async function fetchEmployeeData() {
+    async function fetchProjectData() {
       try {
-        const employeesData = await fetch(
-          `http://localhost:8080/employees/${empId}`
+        const projectData = await fetch(
+          `http://localhost:8080/projects/${projectId}`
         );
-        if (!employeesData.ok) {
+        if (!projectData.ok) {
         } else {
-          const data = await employeesData.json();
-          setEmployeeData(data);
+          const data = await projectData.json();
+          setProjectData(data);
         }
       } catch (error) {
         console.error(error.message);
@@ -29,7 +29,7 @@ const EmployeeDetails = () => {
     async function fetchTasksData() {
       try {
         const tasksData = await fetch(
-          `http://localhost:8080/employees/tasks/${empId}`
+          `http://localhost:8080/projects/tasks/${projectId}`
         );
         if (!tasksData.ok) {
         } else {
@@ -44,7 +44,7 @@ const EmployeeDetails = () => {
     async function fetchTeamsData() {
       try {
         const teamsData = await fetch(
-          `http://localhost:8080/employees/teammembers/${empId}`
+          `http://localhost:8080/projects/teams/${projectId}`
         );
         if (!teamsData.ok) {
         } else {
@@ -56,17 +56,24 @@ const EmployeeDetails = () => {
       }
     }
 
-    fetchEmployeeData();
+    fetchProjectData();
     fetchTasksData();
     fetchTeamsData();
-  }, [empId]);
+  }, [projectId]);
 
   const {
-    employee_name,
-    employee_lastname,
-    employee_position,
-    employee_email,
-  } = employeeData;
+    project_name,
+    start_date,
+    end_date,
+    project_status_name,
+    project_description
+  } = projectData;
+
+  function formatDate(inputDate) {
+    const date = new Date(inputDate);
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  }
 
 
   return (
@@ -77,17 +84,19 @@ const EmployeeDetails = () => {
         <div className="employeeInfo">
           <img
             src="https://via.placeholder.com/150"
-            alt={`${employee_name} ${employee_lastname}`}
+            alt={`${project_name}`}
             className="employee-image"
           />
           <h2>
-            {employee_name} {employee_lastname}
+            {project_name}
           </h2>
-          <p>Position: {employee_position}</p>
-          <p>Email: {employee_email}</p>
+          <p>{project_status_name}</p>
+          <p>{project_description}</p>
+          <p>Start of the project: {formatDate(start_date)}</p>
+          <p>Anticipated date of completion: {formatDate(end_date)}</p>
         </div>
         <div className="employeeTasks">
-          <h2>Assigned tasks</h2>
+          <h2>Tasks associated with the project</h2>
           <ul>
             {tasksData.map((task) => (
               <li key={task.task_id}>{task.task_name}</li>
@@ -95,7 +104,7 @@ const EmployeeDetails = () => {
           </ul>
         </div>
         <div className="employeeTeams">
-          <h2>Assigned teams</h2>
+          <h2>Teams assigned to the project</h2>
           <ul>
             {teamsData.map((team) => (
               <li key={team.team_id}>{team.team_name}</li>
@@ -107,4 +116,4 @@ const EmployeeDetails = () => {
   );
 };
 
-export default EmployeeDetails;
+export default ProjectDetails;

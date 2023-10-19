@@ -50,17 +50,7 @@ const EmployeeTable = () => {
     }
   };
 
-  const getPositionName = (positionId) => {
-    const positions = [
-      { id: 1, name: "Boss" },
-      { id: 2, name: "Frontend Developer" },
-      { id: 3, name: "Backend Developer" },
-    ];
-
-    const position = positions.find((pos) => pos.id === positionId);
-    return position ? position.name : "Unknown Position";
-  };
-
+  
   return (
     <div>
       <div className="aboveTable">
@@ -84,7 +74,7 @@ const EmployeeTable = () => {
             <tr key={employee.employee_id}>
               <td>{employee.employee_name}</td>
               <td>{employee.employee_lastname}</td>
-              <td>{getPositionName(employee.employee_position)}</td>
+              <td>{employee.employee_position}</td>
               <td>{employee.employee_email}</td>
               <td>
                 <Link to={`/employees/${employee.employee_id}`}>

@@ -50,21 +50,12 @@ const ProjectTable = () => {
       }
     };
   
-    const getStatus = (statusId) => {
-      const statuses = [
-        { id: 1, name: "Active" },
-        { id: 2, name: "Completed" }
-      ];
-  
-      const status = statuses.find((stat) => stat.id === statusId);
-      return status ? status.name : "Unknown Status";
-    };
 
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const formattedDate = date.toISOString().split('T')[0];
-        return formattedDate;
-      }
+    function formatDate(inputDate) {
+      const date = new Date(inputDate);
+      const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+      return date.toLocaleDateString('en-US', options);
+    }
   
     return (
       <div>
@@ -78,10 +69,9 @@ const ProjectTable = () => {
           <thead>
             <tr>
               <th>Name</th>
+              <th>Status</th>
               <th>Starting date</th>
               <th>Finishing date</th>
-              <th>Status</th>
-              <th>Description</th>
               <th>Details</th>
             </tr>
           </thead>
@@ -89,12 +79,11 @@ const ProjectTable = () => {
             {data.map((project) => (
               <tr key={project.project_id}>
                 <td>{project.project_name}</td>
+                <td>{project.project_status_name}</td>
                 <td>{formatDate(project.start_date)}</td>
                 <td>{formatDate(project.end_date)}</td>
-                <td>{getStatus(project.project_status)}</td>
-                <td>{project.project_description}</td>
                 <td>
-                  <Link to={`/`}>
+                  <Link to={`/projects/${project.project_id}`}>
                       <button>More</button>
                   </Link>
                   <button>
