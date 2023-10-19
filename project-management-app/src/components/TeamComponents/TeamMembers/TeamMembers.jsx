@@ -40,7 +40,7 @@ const TeamMembers = () => {
             <ul>
             {data.map((member) => (
             <li key={member.team_member_id}>
-            Employee ID: {member.employee_id}
+            Employee ID: {member.employee_name} {member.employee_lastname}
           </li>
         ))}
       </ul>

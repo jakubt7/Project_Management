@@ -54,7 +54,7 @@ const ProjectTable = () => {
     function formatDate(inputDate) {
       const date = new Date(inputDate);
       const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-      return date.toLocaleDateString('en-US', options);
+      return date.toLocaleDateString('en-GB', options);
     }
   
     return (

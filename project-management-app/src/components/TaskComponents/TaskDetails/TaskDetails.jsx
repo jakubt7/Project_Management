@@ -31,14 +31,21 @@ const TaskDetails = () => {
   const {
     task_name,
     task_description,
-    project_id,
-    team_id,
-    assignee_id,
-    status,
+    project_name,
+    team_name,
+    employee_id,
+    employee_name,
+    employee_lastname,
+    task_status_name,
     start_date,
     end_date,
-    employee_id
   } = data;
+
+  function formatDate(inputDate) {
+    const date = new Date(inputDate);
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  }
 
   return (
     <div className="taskDetails">
@@ -50,13 +57,13 @@ const TaskDetails = () => {
             Task Information
             <div>{task_name}</div>
             <div>{task_description}</div>
-            <div>{project_id}</div>
-            <div>{team_id}</div>
-            <div>{assignee_id}</div>
-            <div>{status}</div>
-            <div>{start_date}</div>
-            <div>{end_date}</div>
-            <div>{employee_id}</div>
+            <div>{project_name}</div>
+            <div>{team_name}</div>
+            <div>{employee_name} {employee_lastname}</div>
+            <div>{task_status_name}</div>
+            <div>{formatDate(start_date)}</div>
+            <div>{formatDate(end_date)}</div>
+            <div>{employee_name} {employee_lastname}</div>
           </div>
         </div>
       </div>

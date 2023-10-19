@@ -109,6 +109,14 @@ export async function getTask(id) {
     `
     SELECT * 
     FROM Tasks 
+    INNER JOIN Projects 
+    ON tasks.project_id = projects.project_id
+    INNER JOIN Teams
+    ON tasks.team_id = teams.team_id
+    INNER JOIN Employees
+    ON tasks.assignee_id = employees.employee_id
+    INNER JOIN TaskStatus
+    ON tasks.status = taskstatus.task_status_id
     WHERE task_id = ?`,
     [id]
   );
@@ -194,8 +202,9 @@ export async function getProjectTasks(id) {
 export async function getProjectTeams(id) {
   const [rows] = await pool.query(
     `
-    SELECT * 
+    SELECT *
     FROM TeamMembers 
+    INNER JOIN teams ON teammembers.team_id = teams.team_id
     WHERE project_id = ? `,
     [id]
   );
@@ -245,7 +254,9 @@ export async function getTeamMember(id) {
   const [rows] = await pool.query(
     `
     SELECT * 
-    FROM TeamMembers 
+    FROM TeamMembers
+    INNER JOIN Employees
+    ON teammembers.employee_id = employees.employee_id
     WHERE team_id = ?`,
     [id]
   );
