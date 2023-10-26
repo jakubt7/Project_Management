@@ -1,16 +1,14 @@
 import React from 'react'
 import './Tasks.scss'
 import TaskList from '../../components/TaskComponents/TaskList/TaskList'
-import Sidebar from '../../components/Sidebar/Sidebar'
-import Navbar from '../../components/Navbar/Navbar'
+import AppHeader from '../../components/AppHeader/AppHeader';
 
 function Tasks() {
   return (
-    <div className="tasks">
-      <Sidebar />
-      <div className="mainContainer">
-        <Navbar />
-        <TaskList />
+    <div className="app">
+      <AppHeader />
+      <div className="appContent">
+       <TaskList />
       </div>
     </div>
   );

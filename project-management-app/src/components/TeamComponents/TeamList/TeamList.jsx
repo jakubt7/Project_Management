@@ -31,7 +31,7 @@ const TeamList = () => {
           Add Team
         </Link>
       </div>
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap columns-3">
         {data.map((team) => (
           <Link
             to={`/teams/${team.team_id}`}
@@ -42,7 +42,6 @@ const TeamList = () => {
               <img
                 src="https://picsum.photos//150/150"
                 alt={`${team.team_name}`}
-                className="team-image w-20 h-20 mx-auto mb-2"
               />
               <div className="text-center">
                 <div className="font-medium">

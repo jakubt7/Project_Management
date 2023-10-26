@@ -1,18 +1,16 @@
 import React from 'react'
 import './Projects.scss'
-import Sidebar from '../../components/Sidebar/Sidebar';
-import Navbar from '../../components/Navbar/Navbar';
 import ProjectTable from '../../components/ProjectComponents/ProjectTable/ProjectTable';
+import AppHeader from '../../components/AppHeader/AppHeader';
 
 function Projects() {
     return (
-        <div className="projects">
-          <Sidebar />
-          <div className="mainContainer">
-            <Navbar />
-            <ProjectTable />
-          </div>
-        </div>
+      <div className="app">
+      <AppHeader />
+      <div className="appContent">
+       <ProjectTable />
+      </div>
+    </div>
       );
 }
 
