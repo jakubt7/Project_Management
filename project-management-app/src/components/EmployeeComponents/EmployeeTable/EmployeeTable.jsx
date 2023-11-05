@@ -63,7 +63,7 @@ const EmployeeTable = () => {
           </div>
         </div>
         <div className="bg-white rounded-lg shadow-md">
-          <table className="min-w-full m-auto">
+          <table className="min-w-full m-auto rounded-lg">
             <thead>
               <tr className="bg-gray-100">
                 <th className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">

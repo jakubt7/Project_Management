@@ -68,6 +68,7 @@ const ProjectTable = () => {
               </Link>
             </div>
           </div>
+          <div className="bg-white rounded-lg shadow-md">
           <table className="min-w-full m-auto">
             <thead>
               <tr className="bg-gray-100">
@@ -103,6 +104,7 @@ const ProjectTable = () => {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     );

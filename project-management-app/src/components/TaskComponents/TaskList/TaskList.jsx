@@ -24,31 +24,39 @@ const TaskList = () => {
     }, [data]);
   
     return (
-      <div>
-        <div className="aboveList">
-          <h2>Task List</h2>
-          <Link to="/projects/create" className="btn">
-            Add Task
-          </Link>
-        </div>
+      <div className="flex justify-center mt-5">
+        <div className="w-5/6">
+        <div className="bg-white p-4 shadow-md rounded-lg mb-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-2xl text-gray-800">Task List</h2>
+              <Link to="/projects/create" className="btn bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg">
+                Add Task
+              </Link>
+            </div>
+          </div>
         <div>
+          <div className="flex justify-between text-center mb-2">
+            <div className='w-1/4'>Task ID</div>
+            <div className='w-1/4'>Project</div>
+            <div className='w-1/4'>Assigned</div>
+            <div className='w-1/4'>Status</div>
+            </div>
           {data.map((task) => (
             <Link
               to={`/tasks/${task.task_id}`}
               key={task.task_id}
-              className="w-1/2 md:w-1/5 p-1"
             >
-              <div className="bg-slate-50 rounded-xl p-3 bg-slate-300">
-                <div className="text-center">
-                  <div className="font-medium">
-                    <div className="text-slate-950 dark:text-slate-950">
-                      {task.task_name}
+              <div className="bg-gray-100 rounded-lg p-3 hover:bg-gray-300 mb-4 border border-slate-600">
+                    <div className="flex justify-between font-medium text-center">
+                      <div className='w-1/4'>{task.task_name}</div>
+                      <div className='w-1/4'>{task.project_name}</div>
+                      <div className='w-1/4'>{task.employee_name} {task.employee_lastname}</div>
+                      <div className='w-1/4'>{task.task_status_name}</div>
                     </div>
                   </div>
-                </div>
-              </div>
             </Link>
           ))}
+          </div>
         </div>
       </div>
     );

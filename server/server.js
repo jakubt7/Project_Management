@@ -100,7 +100,10 @@ export async function deleteEmployee(employeeId) {
 export async function getTasks() {
   const [rows] = await pool.query(`
     SELECT * 
-    FROM Tasks`);
+    FROM Tasks
+    INNER JOIN Projects ON tasks.project_id = projects.project_id
+    INNER JOIN Employees ON tasks.employee_id = employees.employee_id
+    INNER JOIN TaskStatus ON tasks.status = taskstatus.task_status_id`);
   return rows;
 }
 
