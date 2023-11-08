@@ -82,11 +82,11 @@ const ProjectTable = () => {
             <tbody>
               {data.map((project) => (
                 <tr key={project.project_id} className="border-b hover:bg-gray-100">
-                  <td className="px-4 py-2 whitespace-nowrap">{project.project_name}</td>
-                  <td className="px-4 py-2 whitespace-nowrap">{project.project_status_name}</td>
-                  <td className="px-4 py-2 whitespace-nowrap">{formatDate(project.start_date)}</td>
-                  <td className="px-4 py-2 whitespace-nowrap">{formatDate(project.end_date)}</td>
-                  <td className="px-4 py-2 whitespace-nowrap">
+                  <td className="px-6 py-4 whitespace-nowrap">{project.project_name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{project.project_status_name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{formatDate(project.start_date)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{formatDate(project.end_date)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <Link to={`/projects/${project.project_id}`} className="text-blue-500 hover:underline hover:text-blue-700">
                       More
                     </Link>

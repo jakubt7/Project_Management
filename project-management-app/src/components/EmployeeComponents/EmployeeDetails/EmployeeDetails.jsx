@@ -72,7 +72,6 @@ const EmployeeDetails = () => {
 
   return (
     <div className="employeeDetails">
-      <AppHeader />
       <div className="flex justify-center h-screen mt-5">
         <div className="w-3/5">
           <div className=" border-solid border-2 border-black p-10 rounded-md">

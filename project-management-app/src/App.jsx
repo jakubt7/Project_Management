@@ -15,6 +15,7 @@ import TeamMembers from './components/TeamComponents/TeamMembers/TeamMembers';
 import TaskDetails from './components/TaskComponents/TaskDetails/TaskDetails';
 import ProjectDetails from './components/ProjectComponents/ProjectDetails/ProjectDetails';
 import AppHeader from './components/AppHeader/AppHeader';
+import AddEmployeeModal from './components/EmployeeComponents/AddEmployeeModal/AddEmployeeModal';
 
 
 
@@ -25,7 +26,6 @@ function App() {
             <Route path="/" element={<Home/>} />
             <Route path="/login" element={<LoginPage/>} />
             <Route path="/employees" element={<Employees/>} />
-            <Route path="/employees/create" element={<CreateEmployee/>} />
             <Route path="/employees/:empId" element={<EmployeeDetails/>} />
             <Route path="/projects" element={<Projects/>} />
             <Route path="/projects/:projectId" element={<ProjectDetails/>} />

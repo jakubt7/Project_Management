@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './ProjectDetails.scss'; // You can adjust this for your styling
-import Sidebar from '../../Sidebar/Sidebar';
-import Navbar from '../../Navbar/Navbar';
 import { useParams } from 'react-router-dom';
 import AppHeader from '../../AppHeader/AppHeader';
 
