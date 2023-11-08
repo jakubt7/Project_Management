@@ -1,7 +1,4 @@
 import React from "react";
-import Sidebar from "../../components/Sidebar/Sidebar";
-import Navbar from "../../components/Navbar/Navbar";
-import Graph from "../../components/Graph/Graph";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import TaskIcon from "@mui/icons-material/Task";
 import BadgeIcon from "@mui/icons-material/Badge";

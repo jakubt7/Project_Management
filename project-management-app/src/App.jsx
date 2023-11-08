@@ -2,11 +2,9 @@ import { Route, Routes, BrowserRouter} from 'react-router-dom'
 import './App.css'
 import Home from "./pages/Home/Home";
 import LoginPage from './pages/LoginPage/LoginPage';
-import CreateEmployee from './components/EmployeeComponents/CreateEmployee/CreateEmployee';
 import Employees from './pages/Employees/Employees';
 import EmployeeDetails from './components/EmployeeComponents/EmployeeDetails/EmployeeDetails';
 import Projects from './pages/Projects/Projects';
-import CreateProject from './components/ProjectComponents/CreateProject/CreateProject';
 import Tasks from './pages/Tasks/Tasks';
 import CreateTask from './pages/CreateTask/CreateTask';
 import Teams from './pages/Teams/Teams';
@@ -14,8 +12,7 @@ import CreateTeam from './pages/CreateTeam/CreateTeam';
 import TeamMembers from './components/TeamComponents/TeamMembers/TeamMembers';
 import TaskDetails from './components/TaskComponents/TaskDetails/TaskDetails';
 import ProjectDetails from './components/ProjectComponents/ProjectDetails/ProjectDetails';
-import AppHeader from './components/AppHeader/AppHeader';
-import AddEmployeeModal from './components/EmployeeComponents/AddEmployeeModal/AddEmployeeModal';
+
 
 
 
@@ -29,7 +26,6 @@ function App() {
             <Route path="/employees/:empId" element={<EmployeeDetails/>} />
             <Route path="/projects" element={<Projects/>} />
             <Route path="/projects/:projectId" element={<ProjectDetails/>} />
-            <Route path="/projects/create" element={<CreateProject />} />
             <Route path="/tasks" element={<Tasks/>} />
             <Route path="/tasks/create" element={<CreateTask/>} />
             <Route path="/tasks/:taskId" element={<TaskDetails/>} />

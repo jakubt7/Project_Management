@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./EmployeeDetails.scss";
-import Sidebar from "../../Sidebar/Sidebar";
-import Navbar from "../../Navbar/Navbar";
 import { useParams } from "react-router-dom";
 import AppHeader from "../../AppHeader/AppHeader";
 
@@ -72,6 +70,7 @@ const EmployeeDetails = () => {
 
   return (
     <div className="employeeDetails">
+      <AppHeader />
       <div className="flex justify-center h-screen mt-5">
         <div className="w-3/5">
           <div className=" border-solid border-2 border-black p-10 rounded-md">
