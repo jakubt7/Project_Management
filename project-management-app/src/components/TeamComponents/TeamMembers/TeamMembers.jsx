@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../../Sidebar/Sidebar";
-import Navbar from "../../Navbar/Navbar";
 import { useParams } from "react-router-dom";
 import './TeamMembers.scss';
 

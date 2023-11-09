@@ -6,7 +6,6 @@ import Employees from './pages/Employees/Employees';
 import EmployeeDetails from './components/EmployeeComponents/EmployeeDetails/EmployeeDetails';
 import Projects from './pages/Projects/Projects';
 import Tasks from './pages/Tasks/Tasks';
-import CreateTask from './pages/CreateTask/CreateTask';
 import Teams from './pages/Teams/Teams';
 import CreateTeam from './pages/CreateTeam/CreateTeam';
 import TeamMembers from './components/TeamComponents/TeamMembers/TeamMembers';
@@ -27,7 +26,6 @@ function App() {
             <Route path="/projects" element={<Projects/>} />
             <Route path="/projects/:projectId" element={<ProjectDetails/>} />
             <Route path="/tasks" element={<Tasks/>} />
-            <Route path="/tasks/create" element={<CreateTask/>} />
             <Route path="/tasks/:taskId" element={<TaskDetails/>} />
             <Route path="/teams" element={<Teams/>} />
             <Route path="/teams/create" element={<CreateTeam/>} />

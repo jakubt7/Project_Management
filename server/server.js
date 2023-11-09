@@ -145,11 +145,12 @@ export async function createTask(
   assignee_id,
   status,
   start_date,
-  end_date
+  end_date,
+  employeeId
 ) {
   const [result] = await pool.query(
     `
-    INSERT INTO Tasks (task_name, task_description, project_id, team_id, assignee_id, status, start_date, end_date)
+    INSERT INTO Tasks (task_name, task_description, project_id, team_id, assignee_id, status, start_date, end_date, employee_id)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `,
     [
@@ -161,9 +162,17 @@ export async function createTask(
       status,
       start_date,
       end_date,
+      employeeId,
     ]
   );
   return result.insertId;
+}
+
+export async function getTaskStatus() {
+  const [rows] = await pool.query(`
+  SELECT * 
+  FROM TaskStatus `);
+  return rows;
 }
 
 ////////////////////////////////////////////
