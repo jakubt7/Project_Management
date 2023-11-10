@@ -43,6 +43,50 @@ const TaskList = () => {
     setIsModalOpen(false);
   };
 
+  const handleDelete = async (id) => {
+    if (
+      confirm(
+        "Deleting this task is irreversible. Do you want to confirm the deletion?"
+      ) == true
+    ) {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/tasks/delete/${id}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        if (response.ok) {
+          console.log("Task deleted successfully");
+        } else {
+          console.log("Error encountered while deleting the task");
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    } else {
+      return false;
+    }
+
+    async function fetchData() {
+      try {
+        const taskData = await fetch("http://localhost:8080/tasks");
+
+        if (!taskData.ok) {
+          console.log("There was an error fetching from the API");
+        } else {
+          const data = await taskData.json();
+          setData(data);
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+    fetchData();
+
+  };
+
   return (
     <div className="flex justify-center mt-5">
       <div className="w-5/6">
@@ -106,7 +150,7 @@ const TaskList = () => {
                     >
                       Edit
                     </Link>
-                    <button className="text-red-500 hover:underline hover:text-red-700 ml-4">
+                    <button className="text-red-500 hover:underline hover:text-red-700 ml-4" onClick={() => handleDelete(task.task_id)}>
                       Delete
                     </button>
                   </td>

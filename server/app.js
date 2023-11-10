@@ -24,6 +24,7 @@ import {
   getProjectTasks,
   getProjectTeams,
   getTaskStatus,
+  deleteTask,
 } from "./server.js";
 
 const app = express();
@@ -118,6 +119,7 @@ app.post("/tasks", async (req, res) => {
     status,
     start_date,
     end_date,
+    employee_id
   } = req.body;
   const task = await createTask(
     name,
@@ -127,7 +129,8 @@ app.post("/tasks", async (req, res) => {
     assignee_id,
     status,
     start_date,
-    end_date
+    end_date,
+    employee_id
   );
   res.status(201).send(task);
 });
@@ -135,6 +138,18 @@ app.post("/tasks", async (req, res) => {
 app.get("/taskstatus", async (req, res) => {
   const taskstatus = await getTaskStatus();
   res.send(taskstatus);
+});
+
+app.delete("/tasks/delete/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    await deleteTask(id);
+    res.sendStatus(204);
+  } catch (error) {
+    res
+      .status(500)
+      .send({ error: "Failed to delete task.", message: error.message });
+  }
 });
 
 ////////////////////////////////////////////

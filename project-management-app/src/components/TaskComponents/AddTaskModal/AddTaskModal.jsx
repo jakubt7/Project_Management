@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import Select from "../../Select/Select";
 
-const AddTaskModal = (isOpen, onClose, onAddTask) => {
+const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
   const nameRef = useRef();
   const descriptionRef = useRef();
   const projectRef = useRef();
@@ -16,6 +16,13 @@ const AddTaskModal = (isOpen, onClose, onAddTask) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    console.log(nameRef.current.value);
+    console.log("projectRef in AddTaskModal:", projectRef);
+    console.log("teamRef in AddTaskModal:", teamRef);
+    console.log("assigneeRef in AddTaskModal:", assigneeRef);
+    console.log("statusRef in AddTaskModal:", statusRef);
+
+
     const name = nameRef.current.value;
     const description = descriptionRef.current.value;
     const project = projectRef.current.value;
@@ -29,16 +36,17 @@ const AddTaskModal = (isOpen, onClose, onAddTask) => {
     const task = {
       name: name,
       description: description,
-      project: project,
-      team: team,
-      assignee: assignee,
+      project_id: project,
+      team_id: team,
+      assignee_id: assignee,
       status: status,
       start_date: start,
       end_date: end,
-      employee: employee,
+      employee_id: employee,
     };
 
     setIsPending(true);
+
 
     try {
       const response = await fetch("http://localhost:8080/tasks", {
@@ -71,6 +79,7 @@ const AddTaskModal = (isOpen, onClose, onAddTask) => {
     }
   };
 
+  
   return (
     <div
       className={
@@ -106,24 +115,28 @@ const AddTaskModal = (isOpen, onClose, onAddTask) => {
                 label="Associated project"
                 column="project_name"
                 id="project_id"
+                ref={projectRef}
               />
               <Select
                 api="http://localhost:8080/teams"
                 label="Assign a team"
                 column="team_name"
                 id="team_id"
+                ref={teamRef}
               />
               <Select
                 api="http://localhost:8080/employees"
                 label="Assignee"
                 column="employee_name"
                 id="employee_id"
+                ref={assigneeRef}
               />
               <Select
                 api="http://localhost:8080/taskstatus"
                 label="Status"
                 column="task_status_name"
                 id="task_status_id"
+                ref={statusRef}
               />
               <label className="block text-sm font-medium text-gray-600 mb-2">
                 Starting date:
@@ -142,6 +155,13 @@ const AddTaskModal = (isOpen, onClose, onAddTask) => {
                 name="endDate"
                 ref={endRef}
                 className="w-full border rounded py-2 px-3 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+              <Select
+                api="http://localhost:8080/employees"
+                label="Employee"
+                column="employee_name"
+                id="employee_id"
+                ref={employeeRef}
               />
               <div className="flex justify-center gap-6 mt-4">
                 <button

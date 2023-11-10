@@ -83,12 +83,10 @@ export async function createEmployee(name, lastname, position, email) {
 export async function deleteEmployee(employeeId) {
   const [result] = await pool.query(
     `
-        DELETE FROM TeamMembers
-        WHERE employee_id = ?
         DELETE FROM Employees
         WHERE employee_id = ?
       `,
-    [employeeId, employeeId]
+    [employeeId]
   );
 
   return result.affectedRows === 1;
@@ -146,12 +144,12 @@ export async function createTask(
   status,
   start_date,
   end_date,
-  employeeId
+  employee_id
 ) {
   const [result] = await pool.query(
     `
     INSERT INTO Tasks (task_name, task_description, project_id, team_id, assignee_id, status, start_date, end_date, employee_id)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `,
     [
       name,
@@ -162,7 +160,7 @@ export async function createTask(
       status,
       start_date,
       end_date,
-      employeeId,
+      employee_id,
     ]
   );
   return result.insertId;
@@ -173,6 +171,18 @@ export async function getTaskStatus() {
   SELECT * 
   FROM TaskStatus `);
   return rows;
+}
+
+export async function deleteTask(taskId) {
+  const [result] = await pool.query(
+    `
+        DELETE FROM Tasks
+        WHERE task_id = ?
+      `,
+    [taskId]
+  );
+
+  return result.affectedRows === 1;
 }
 
 ////////////////////////////////////////////

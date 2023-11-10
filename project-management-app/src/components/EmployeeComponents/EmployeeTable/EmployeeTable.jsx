@@ -43,6 +43,50 @@ const EmployeeTable = () => {
     setIsModalOpen(false);
   };
 
+  const handleDelete = async (id) => {
+    if (
+      confirm(
+        "Deleting this employee is irreversible. Do you want to cofirm the deletion?"
+      ) == true
+    ) {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/employees/delete/${id}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        if (response.ok) {
+          console.log("Employee deleted successfully");
+        } else {
+          console.log("Error encountered while deleting the employee");
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    } else {
+      return false;
+    }
+
+    async function fetchData() {
+      try {
+        const employeesData = await fetch("http://localhost:8080/employees");
+
+        if (!employeesData.ok) {
+          console.log("There was an error fetching from the API");
+        } else {
+          const data = await employeesData.json();
+          setData(data);
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+    fetchData();
+
+  };
+
   return (
     <div className="flex justify-center h-screen mt-5">
       <div className="w-5/6">
