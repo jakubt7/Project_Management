@@ -24,38 +24,43 @@ const TeamList = () => {
   }, [data]);
 
   return (
-    <div>
-      <div className="aboveList">
-        <h2>Team List</h2>
-        <Link to="/projects/create" className="btn">
-          Add Team
-        </Link>
-      </div>
-      <div className="flex flex-wrap columns-3">
-        {data.map((team) => (
-          <Link
-            to={`/teams/${team.team_id}`}
-            key={team.team_id}
-            className="w-1/2 md:w-1/5 p-2"
-          >
-            <div className="bg-slate-50 rounded-xl p-20 light:bg-slate-800">
-              <img
-                src="https://picsum.photos//150/150"
-                alt={`${team.team_name}`}
-              />
-              <div className="text-center">
-                <div className="font-medium">
-                  <div className="text-slate-950 dark:text-slate-950">
-                    {team.team_name}
+    <div className="flex justify-center mt-5">
+      <div className="w-5/6">
+        <div className="bg-white p-4 shadow-md rounded-lg mb-4">
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-2xl text-gray-800">Team List</h2>
+            <button
+              // onClick={() => setIsModalOpen(true)}
+              className="btn bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
+            >
+              Add Team
+            </button>
+          </div>
+        </div>
+        <div className="flex flex-wrap -mx-4">
+          {data.map((team) => (
+            <div key={team.team_id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 px-4 mb-4">
+              <Link to={`/teams/${team.team_id}`}>
+                <div className="bg-white rounded-xl p-6 shadow-md">
+                  <img
+                    src="https://picsum.photos/200/200"
+                    alt={`${team.team_name}`}
+                    className="rounded-full h-32 w-32 object-cover mx-auto mb-4"
+                  />
+                  <div className="text-center">
+                    <div className="font-medium text-gray-800">
+                      <div className="text-xl">{team.team_name}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             </div>
-          </Link>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
 };
+
 
 export default TeamList;

@@ -279,7 +279,9 @@ export async function getTeamMember(id) {
     FROM TeamMembers
     INNER JOIN Employees
     ON teammembers.employee_id = employees.employee_id
-    WHERE team_id = ?`,
+    INNER JOIN Teams
+    ON teammembers.team_id = teams.team_id
+    WHERE teammembers.team_id = ?`,
     [id]
   );
   return rows;

@@ -7,7 +7,7 @@ const AppHeader = () => {
     <div className="appHeader">
         <div className="text-3xl mt-12 mb-12 text-sky-950 text-center">
         <Link to={`/`}>
-        team.io
+        company.io
        </Link>
                 </div>
     <nav className="p-5">
