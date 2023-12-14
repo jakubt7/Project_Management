@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './TeamList.scss';
 import { Link } from 'react-router-dom';
+import AddTeamModal from '../AddTeamModal/AddTeamModal';
 
 const TeamList = () => {
   const [data, setData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -23,6 +25,25 @@ const TeamList = () => {
     fetchData();
   }, [data]);
 
+  const handleAddTeam = async () => {
+    async function fetchData() {
+      try {
+        const teamData = await fetch("http://localhost:8080/teams");
+
+        if (!teamData.ok) {
+          console.log("There was an error fetching from the API");
+        } else {
+          const data = await teamData.json();
+          setData(data);
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+    fetchData();
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="flex justify-center mt-5">
       <div className="w-5/6">
@@ -30,7 +51,7 @@ const TeamList = () => {
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-2xl text-gray-800">Team List</h2>
             <button
-              // onClick={() => setIsModalOpen(true)}
+              onClick={() => setIsModalOpen(true)}
               className="btn bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
             >
               Add Team
@@ -58,6 +79,11 @@ const TeamList = () => {
           ))}
         </div>
       </div>
+      <AddTeamModal 
+      isOpen={isModalOpen}
+      onClose={() => setIsModalOpen(false)}
+      onAddTeam={handleAddTeam}
+      />
     </div>
   );
 };

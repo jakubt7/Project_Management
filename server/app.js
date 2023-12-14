@@ -25,6 +25,7 @@ import {
   getProjectTeams,
   getTaskStatus,
   deleteTask,
+  updateTask,
 } from "./server.js";
 
 const app = express();
@@ -133,6 +134,40 @@ app.post("/tasks", async (req, res) => {
     employee_id
   );
   res.status(201).send(task);
+});
+
+app.put("/tasks/update/:id", async (req, res) => {
+  const {
+    task_name,
+    task_description,
+    project_id,
+    team_id,
+    assignee_id,
+    status,
+    start_date,
+    end_date,
+    employee_id,
+  } = req.body;
+  const taskId = req.params.id;
+
+  const taskUpdate = await updateTask(
+    task_name,
+    task_description,
+    project_id,
+    team_id,
+    assignee_id,
+    status,
+    start_date,
+    end_date,
+    employee_id,
+    taskId
+  );
+
+  if (taskUpdate > 0) {
+    res.send(`Task with ID ${taskId} updated successfully`);
+  } else {
+    res.status(500).send(`Failed to update task with ID ${taskId}`);
+  }
 });
 
 app.get("/taskstatus", async (req, res) => {

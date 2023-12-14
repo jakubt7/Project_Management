@@ -16,9 +16,9 @@ const TeamMembers = () => {
 
         if (!teamsData.ok) {
         } else {
-          const responseData = await teamsData.json();
+          const data = await teamsData.json();
 
-          setData(responseData);
+          setData(data);
         }
       } catch (error) {
         console.error(error.message);
@@ -38,11 +38,11 @@ const TeamMembers = () => {
             <div className="bg-white rounded-xl p-6 shadow-md mb-4">
               <img
                 src="https://picsum.photos/200/200"
-                alt={`${data.team_name}`}
+                alt={`team picture`}
                 className="rounded-full h-32 w-32 object-cover mx-auto mb-4"
               />
               <div className="text-center">
-                <h2 className="font-medium text-gray-800 text-xl">{data[0].team_name}</h2>
+                <h2 className="font-medium text-gray-800 text-xl">{data.team_name}</h2>
               </div>
               <div className="membersList flex justify-center items-center mt-2">
                 <div className="p-3 rounded-md">

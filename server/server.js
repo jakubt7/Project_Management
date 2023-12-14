@@ -18,7 +18,8 @@ const pool = mysql
 export async function getTeams() {
   const [rows] = await pool.query(`
     SELECT * 
-    FROM Teams`);
+    FROM Teams
+    ORDER BY team_id ASC`);
   return rows;
 }
 
@@ -52,7 +53,8 @@ export async function getEmployees() {
   SELECT * 
   FROM Employees 
   INNER JOIN employeepositions 
-  ON employees.employee_position = employeepositions.employee_position_id`);
+  ON employees.employee_position = employeepositions.employee_position_id
+  ORDER BY employees.employee_id ASC`);
   return rows;
 }
 
@@ -101,7 +103,8 @@ export async function getTasks() {
     FROM Tasks
     INNER JOIN Projects ON tasks.project_id = projects.project_id
     INNER JOIN Employees ON tasks.employee_id = employees.employee_id
-    INNER JOIN TaskStatus ON tasks.status = taskstatus.task_status_id`);
+    INNER JOIN TaskStatus ON tasks.status = taskstatus.task_status_id
+    ORDER BY tasks.task_id ASC`);
   return rows;
 }
 
@@ -129,7 +132,8 @@ export async function getEmployeeTasks(id) {
     `
     SELECT * 
     FROM Tasks 
-    WHERE employee_id = ?`,
+    WHERE employee_id = ?
+    ORDER BY tasks.task_id ASC`,
     [id]
   );
   return rows;
@@ -146,7 +150,7 @@ export async function createTask(
   end_date,
   employee_id
 ) {
-  const [result] = await pool.query(
+  const [result] = await pool.query (
     `
     INSERT INTO Tasks (task_name, task_description, project_id, team_id, assignee_id, status, start_date, end_date, employee_id)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -164,6 +168,49 @@ export async function createTask(
     ]
   );
   return result.insertId;
+}
+
+export async function updateTask(
+  task_name,
+  task_description,
+  project_id,
+  team_id,
+  assignee_id,
+  status,
+  start_date,
+  end_date,
+  employee_id,
+  task_id
+) {
+  const [result] = await pool.query(
+    `
+    UPDATE tasks 
+    SET 
+      task_name = ?,
+      task_description = ?,
+      project_id = ?,
+      team_id = ?,
+      assignee_id = ?,
+      status = ?,
+      start_date = ?,
+      end_date = ?,
+      employee_id = ?
+    WHERE task_id = ?;
+  `,
+    [
+      task_name,
+      task_description,
+      project_id,
+      team_id,
+      assignee_id,
+      status,
+      start_date,
+      end_date,
+      employee_id,
+      task_id,
+    ]
+  );
+  return result.affectedRows;
 }
 
 export async function getTaskStatus() {
@@ -193,7 +240,8 @@ export async function getProjects() {
     SELECT * 
     FROM Projects
     INNER JOIN ProjectStatus
-    ON Projects.project_status = ProjectStatus.project_status_id`);
+    ON Projects.project_status = ProjectStatus.project_status_id
+    ORDER BY projects.project_id ASC`);
   return rows;
 }
 
@@ -215,7 +263,8 @@ export async function getProjectTasks(id) {
     `
     SELECT * 
     FROM Tasks 
-    WHERE project_id = ? `,
+    WHERE project_id = ? 
+    ORDER BY tasks.task_id ASC`,
     [id]
   );
   return rows;
@@ -227,7 +276,8 @@ export async function getProjectTeams(id) {
     SELECT *
     FROM TeamMembers 
     INNER JOIN teams ON teammembers.team_id = teams.team_id
-    WHERE project_id = ? `,
+    WHERE project_id = ? 
+    ORDER BY teammembers.team_member_id ASC`,
     [id]
   );
   return rows;
@@ -268,7 +318,8 @@ export async function deleteProject(projectId) {
 export async function getTeamMembers() {
   const [rows] = await pool.query(`
     SELECT * 
-    FROM TeamMembers`);
+    FROM TeamMembers
+    ORDER BY teammembers.team_member_id ASC`);
   return rows;
 }
 
@@ -292,12 +343,12 @@ export async function getEmployeeTeamMembership(id) {
     `
     SELECT * 
     FROM TeamMembers 
-    INNER JOIN Teams ON teammembers.team_id = teams.team_id WHERE teammembers.employee_id = ?`,
+    INNER JOIN Teams ON teammembers.team_id = teams.team_id WHERE teammembers.employee_id = ?
+    ORDER BY teammembers.team_member_id ASC`,
     [id]
   );
   return rows;
 }
-
 
 export async function createTeamMember(team_id, employee_id) {
   const [result] = await pool.query(

@@ -100,6 +100,7 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
                 type="text"
                 name="name"
                 ref={nameRef}
+                required
                 className="w-full border rounded py-2 px-3 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
               <label className="block text-sm font-medium text-gray-600 mb-2">
@@ -108,6 +109,7 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
               <textarea
                 name="description"
                 ref={descriptionRef}
+                required
                 className="w-full border rounded py-2 px-3 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               ></textarea>
               <Select
@@ -115,6 +117,7 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
                 label="Associated project"
                 column="project_name"
                 id="project_id"
+                required
                 ref={projectRef}
               />
               <Select
@@ -122,6 +125,7 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
                 label="Assign a team"
                 column="team_name"
                 id="team_id"
+                required
                 ref={teamRef}
               />
               <Select
@@ -129,6 +133,7 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
                 label="Assignee"
                 column="employee_name"
                 id="employee_id"
+                required
                 ref={assigneeRef}
               />
               <Select
@@ -136,6 +141,7 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
                 label="Status"
                 column="task_status_name"
                 id="task_status_id"
+                required
                 ref={statusRef}
               />
               <label className="block text-sm font-medium text-gray-600 mb-2">
@@ -145,6 +151,7 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
                 type="date"
                 name="startDate"
                 ref={startRef}
+                required
                 className="w-full border rounded py-2 px-3 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
               <label className="block text-sm font-medium text-gray-600 mb-2">
@@ -154,6 +161,7 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
                 type="date"
                 name="endDate"
                 ref={endRef}
+                required
                 className="w-full border rounded py-2 px-3 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
               <Select
@@ -161,6 +169,7 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
                 label="Employee"
                 column="employee_name"
                 id="employee_id"
+                required
                 ref={employeeRef}
               />
               <div className="flex justify-center gap-6 mt-4">
