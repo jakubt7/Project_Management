@@ -112,6 +112,8 @@ const TaskDetails = () => {
               {isEditing ? (
                 <>
                   <div className="mb-4">
+                    <h2 className="text-3xl text-center">Edit task</h2>
+                    <hr className="mt-2 mb-2"></hr>
                   <p className="text-lg">
                     Task name: 
                   </p>
@@ -179,7 +181,7 @@ const TaskDetails = () => {
                     <input
                       type="date"
                       name="start_date"
-                      value={editedTask.start_date}
+                      value={formatDate(editedTask.start_date)}
                       onChange={handleInputChange}
                       className="mt-1 p-2 border rounded-md w-full"
                     />
@@ -215,29 +217,23 @@ const TaskDetails = () => {
                     {editedTask.task_name}
                   </p>
                   <div className="mt-2">
-                    <img
-                      src="https://via.placeholder.com/1280x720"
-                      className="rounded-sm w-full"
-                    />
-                  </div>
-                  <div className="mt-2">
                     <p className="text-lg">
                       Description: {editedTask.task_description}
                     </p>
                     <p className="text-lg">
-                      Project ID: {editedTask.project_id}
+                      Project: {editedTask.project_name}
                     </p>
-                    <p className="text-lg">Team ID: {editedTask.team_id}</p>
+                    <p className="text-lg">Team: {editedTask.team_name}</p>
                     <p className="text-lg">
-                      Assignee ID: {editedTask.assignee_id}
+                      Assignee: {editedTask.employee_name} {editedTask.employee_lastname}
                     </p>
-                    <p className="text-lg">Status: {editedTask.status}</p>
+                    <p className="text-lg">Status: {editedTask.task_status_name}</p>
                     <p className="text-lg">
-                      Start Date: {editedTask.start_date}
+                      Start Date: {formatDate(editedTask.start_date)}
                     </p>
-                    <p className="text-lg">End Date: {editedTask.end_date}</p>
+                    <p className="text-lg">End Date: {formatDate(editedTask.end_date)}</p>
                     <p className="text-lg">
-                      Employee ID: {editedTask.employee_id}
+                      Employee: {editedTask.employee_name} {editedTask.employee_lastname}
                     </p>
                   </div>
                 </>

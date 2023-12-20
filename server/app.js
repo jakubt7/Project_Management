@@ -26,6 +26,7 @@ import {
   getTaskStatus,
   deleteTask,
   updateTask,
+  deleteTeamMember,
 } from "./server.js";
 
 const app = express();
@@ -120,7 +121,7 @@ app.post("/tasks", async (req, res) => {
     status,
     start_date,
     end_date,
-    employee_id
+    employee_id,
   } = req.body;
   const task = await createTask(
     name,
@@ -259,6 +260,18 @@ app.post("/teammembers", async (req, res) => {
   const { team_id, employee_id } = req.body;
   const member = await createTeamMember(team_id, employee_id);
   res.status(201).send(member);
+});
+
+app.delete("/teammembers/delete/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    await deleteTeamMember(id);
+    res.sendStatus(204);
+  } catch (error) {
+    res
+      .status(500)
+      .send({ error: "Failed to delete team.", message: error.message });
+  }
 });
 
 ////////////////////////////////////////////

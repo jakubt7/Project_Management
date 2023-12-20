@@ -45,6 +45,7 @@ export async function createTeam(name) {
   return result.insertId;
 }
 
+
 ////////////////////////////////////////////
 // EMPLOYEE REQUESTS
 
@@ -359,4 +360,16 @@ export async function createTeamMember(team_id, employee_id) {
     [team_id, employee_id]
   );
   return result.insertId;
+}
+
+export async function deleteTeamMember(teamId) {
+  const [result] = await pool.query(
+    `
+        DELETE FROM TeamMembers
+        WHERE team_member_id = ?
+      `,
+    [teamId]
+  );
+
+  return result.affectedRows === 1;
 }

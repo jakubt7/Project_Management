@@ -16,12 +16,6 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log(nameRef.current.value);
-    console.log("projectRef in AddTaskModal:", projectRef);
-    console.log("teamRef in AddTaskModal:", teamRef);
-    console.log("assigneeRef in AddTaskModal:", assigneeRef);
-    console.log("statusRef in AddTaskModal:", statusRef);
-
 
     const name = nameRef.current.value;
     const description = descriptionRef.current.value;
