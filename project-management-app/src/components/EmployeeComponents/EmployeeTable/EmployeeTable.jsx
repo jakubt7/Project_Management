@@ -1,10 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AddEmployeeModal from "../AddEmployeeModal/AddEmployeeModal";
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const EmployeeTable = () => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [order, setOrder] = useState("ASC");
+  const [activeColumn, setActiveColumn] = useState(null);
+
+  const sorting = (col) => {
+    if (order === "ASC") {
+      const sorted = [...data].sort((a, b) =>
+        a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
+      );
+      setData(sorted);
+      setOrder("DSC");
+    } else if (order === "DSC") {
+      const sorted = [...data].sort((a, b) =>
+        a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
+      );
+      setData(sorted);
+      setOrder("ASC");
+    }
+    setActiveColumn(col);
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -105,17 +125,29 @@ const EmployeeTable = () => {
         <table className="min-w-full m-auto rounded-lg">
           <thead>
             <tr className="bg-gray-100">
-              <th className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
+              <th onClick={()=> sorting("employee_name")} className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
                 First Name
+                {activeColumn === "employee_name" && (
+              <ArrowDropDownIcon className="inline-block" />
+            )}
               </th>
-              <th className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
+              <th onClick={()=> sorting("employee_lastname")} className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
                 Last Name
+                {activeColumn === "employee_lastname" && (
+              <ArrowDropDownIcon className="inline-block" />
+            )}
               </th>
-              <th className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
+              <th onClick={()=> sorting("employee_position")} className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
                 Position
+                {activeColumn === "employee_position" && (
+              <ArrowDropDownIcon className="inline-block" />
+            )}
               </th>
-              <th className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
+              <th onClick={()=> sorting("employee_email")} className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
                 Email
+                {activeColumn === "employee_email" && (
+              <ArrowDropDownIcon className="inline-block" />
+            )}
               </th>
               <th className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
                 Details

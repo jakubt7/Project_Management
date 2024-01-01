@@ -2,10 +2,30 @@ import React, { useState, useEffect } from "react";
 import "./ProjectTable.scss";
 import { Link } from "react-router-dom";
 import AddProjectModal from "../AddProjectModal/AddProjectModal";
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const ProjectTable = () => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [order, setOrder] = useState("ASC");
+  const [activeColumn, setActiveColumn] = useState(null);
+
+  const sorting = (col) => {
+    if (order === "ASC") {
+      const sorted = [...data].sort((a, b) =>
+        a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
+      );
+      setData(sorted);
+      setOrder("DSC");
+    } else if (order === "DSC") {
+      const sorted = [...data].sort((a, b) =>
+        a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
+      );
+      setData(sorted);
+      setOrder("ASC");
+    }
+    setActiveColumn(col);
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -23,7 +43,7 @@ const ProjectTable = () => {
       }
     }
     fetchData();
-  }, [data]);
+  }, []);
 
   const handleDelete = async (id) => {
     if (
@@ -95,17 +115,29 @@ const ProjectTable = () => {
           <table className="min-w-full m-auto">
             <thead>
               <tr className="bg-gray-100">
-                <th className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
+                <th onClick={()=> sorting("project_name")} className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
                   Name
+                  {activeColumn === "project_name" && (
+              <ArrowDropDownIcon className="inline-block" />
+            )}
                 </th>
-                <th className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
+                <th onClick={()=> sorting("project_status_name")} className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
                   Status
+                  {activeColumn === "project_status_name" && (
+              <ArrowDropDownIcon className="inline-block" />
+            )}
                 </th>
-                <th className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
+                <th onClick={()=> sorting("start_date")} className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
                   Starting date
+                  {activeColumn === "start_date" && (
+              <ArrowDropDownIcon className="inline-block" />
+            )}
                 </th>
-                <th className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
+                <th onClick={()=> sorting("end_date")} className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
                   Finishing date
+                  {activeColumn === "end_date" && (
+              <ArrowDropDownIcon className="inline-block" />
+            )}
                 </th>
                 <th className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
                   Details
