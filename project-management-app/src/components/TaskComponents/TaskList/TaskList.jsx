@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AddTaskModal from "../AddTaskModal/AddTaskModal";
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 const TaskList = () => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [order, setOrder] = useState("ASC");
   const [activeColumn, setActiveColumn] = useState(null);
+  const [searchInput, setSearchInput] = useState("");
 
   const sorting = (col) => {
     if (order === "ASC") {
@@ -104,7 +105,6 @@ const TaskList = () => {
       }
     }
     fetchData();
-
   };
 
   return (
@@ -113,6 +113,14 @@ const TaskList = () => {
         <div className="bg-white p-4 shadow-md rounded-lg mb-4">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-2xl text-gray-800">Task List</h2>
+            <div className="border-solid border-gray-400 border-2 rounded-lg w-1/4">
+              <input
+                type="text"
+                class="bg-white h-10 w-full px-4 rounded-lg focus:outline-none hover:cursor-pointer"
+                placeholder="Search tasks"
+                onChange={(e) => setSearchInput(e.target.value)}
+              ></input>
+            </div>
             <button
               onClick={() => setIsModalOpen(true)}
               className="btn bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
@@ -125,29 +133,41 @@ const TaskList = () => {
           <table className="min-w-full m-auto">
             <thead>
               <tr className="bg-gray-100">
-                <th onClick={()=> sorting("task_name")} className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
+                <th
+                  onClick={() => sorting("task_name")}
+                  className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider"
+                >
                   Task ID
                   {activeColumn === "task_name" && (
-              <ArrowDropDownIcon className="inline-block" />
-            )}
+                    <ArrowDropDownIcon className="inline-block" />
+                  )}
                 </th>
-                <th onClick={()=> sorting("project_name")} className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
+                <th
+                  onClick={() => sorting("project_name")}
+                  className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider"
+                >
                   Project
                   {activeColumn === "project_name" && (
-              <ArrowDropDownIcon className="inline-block" />
-            )}
+                    <ArrowDropDownIcon className="inline-block" />
+                  )}
                 </th>
-                <th onClick={()=> sorting("employee_name")} className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
+                <th
+                  onClick={() => sorting("employee_name")}
+                  className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider"
+                >
                   Assigned
                   {activeColumn === "employee_name" && (
-              <ArrowDropDownIcon className="inline-block" />
-            )}
+                    <ArrowDropDownIcon className="inline-block" />
+                  )}
                 </th>
-                <th onClick={()=> sorting("task_status_name")} className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
+                <th
+                  onClick={() => sorting("task_status_name")}
+                  className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider"
+                >
                   Status
                   {activeColumn === "task_status_name" && (
-              <ArrowDropDownIcon className="inline-block" />
-            )}
+                    <ArrowDropDownIcon className="inline-block" />
+                  )}
                 </th>
                 <th className="px-6 py-3 text-xs font-medium text-gray-800 uppercase tracking-wider">
                   Details
@@ -155,39 +175,50 @@ const TaskList = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((task) => (
-                <tr className="border-b hover:bg-gray-100" key={task.task_id}>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    {task.task_name}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    {task.project_name}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    {task.employee_name} {task.employee_lastname}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    {task.task_status_name}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
-                    <Link
-                      to={`/tasks/${task.task_id}`}
-                      className="text-blue-500 hover:underline hover:text-blue-700"
-                    >
-                      More
-                    </Link>
-                    <Link
-                      to={""}
-                      className="text-gray-500 hover:underline hover:text-gray-700 ml-4"
-                    >
-                      Edit
-                    </Link>
-                    <button className="text-red-500 hover:underline hover:text-red-700 ml-4" onClick={() => handleDelete(task.task_id)}>
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {data
+                .filter((task) => {
+                  return searchInput.toLowerCase() === ""
+                    ? task
+                    : task.task_name
+                        .toLowerCase()
+                        .includes(searchInput);
+                })
+                .map((task) => (
+                  <tr className="border-b hover:bg-gray-100" key={task.task_id}>
+                    <td className="px-4 py-2 whitespace-nowrap">
+                      {task.task_name}
+                    </td>
+                    <td className="px-4 py-2 whitespace-nowrap">
+                      {task.project_name}
+                    </td>
+                    <td className="px-4 py-2 whitespace-nowrap">
+                      {task.employee_name} {task.employee_lastname}
+                    </td>
+                    <td className="px-4 py-2 whitespace-nowrap">
+                      {task.task_status_name}
+                    </td>
+                    <td className="px-4 py-2 whitespace-nowrap">
+                      <Link
+                        to={`/tasks/${task.task_id}`}
+                        className="text-blue-500 hover:underline hover:text-blue-700"
+                      >
+                        More
+                      </Link>
+                      <Link
+                        to={""}
+                        className="text-gray-500 hover:underline hover:text-gray-700 ml-4"
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        className="text-red-500 hover:underline hover:text-red-700 ml-4"
+                        onClick={() => handleDelete(task.task_id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

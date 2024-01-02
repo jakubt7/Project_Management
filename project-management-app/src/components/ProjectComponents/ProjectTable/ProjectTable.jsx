@@ -9,6 +9,7 @@ const ProjectTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [order, setOrder] = useState("ASC");
   const [activeColumn, setActiveColumn] = useState(null);
+  const [searchInput, setSearchInput] = useState("");
 
   const sorting = (col) => {
     if (order === "ASC") {
@@ -103,6 +104,14 @@ const ProjectTable = () => {
         <div className="bg-white p-4 shadow-md rounded-lg mb-4">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-2xl text-gray-800">Project List</h2>
+            <div className="border-solid border-gray-400 border-2 rounded-lg w-1/4">
+              <input
+                type="text"
+                class="bg-white h-10 w-full px-4 rounded-lg focus:outline-none hover:cursor-pointer"
+                placeholder="Search projects"
+                onChange={(e) => setSearchInput(e.target.value)}
+              ></input>
+            </div>
             <button
               onClick={() => setIsModalOpen(true)}
               className="btn bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
@@ -145,7 +154,15 @@ const ProjectTable = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((project) => (
+            {data
+                .filter((project) => {
+                  return searchInput.toLowerCase() === ""
+                    ? project
+                    : project.project_name
+                        .toLowerCase()
+                        .includes(searchInput);
+                })
+              .map((project) => (
                 <tr
                   key={project.project_id}
                   className="border-b hover:bg-gray-100"
