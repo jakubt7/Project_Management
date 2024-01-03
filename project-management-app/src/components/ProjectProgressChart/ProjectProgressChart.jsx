@@ -4,6 +4,7 @@ import Chart from "chart.js/auto";
 const ProjectProgressPieChart = () => {
   const chartRef = useRef(null);
   const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState("");
 
   useEffect(() => {
@@ -12,6 +13,10 @@ const ProjectProgressPieChart = () => {
         const response = await fetch("http://localhost:8080/tasks");
         const data = await response.json();
         setTasks(data);
+
+
+        const distinctProjects = [...new Set(data.map((task) => task.project_name))];
+        setProjects(distinctProjects);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -49,19 +54,15 @@ const ProjectProgressPieChart = () => {
               data: statusCounts,
               backgroundColor: [
                 "rgba(255, 99, 132, 0.7)",
-                "rgba(54, 162, 235, 0.7)",
                 "rgba(255, 206, 86, 0.7)",
+                "rgba(54, 162, 235, 0.7)",
               ],
             },
           ],
-          options: {
-            responsive: true,
-            maintainAspectRatio: true,
-          },
-          legend: {
-            display: true,
-            position: 'right', 
-          },
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
         },
       });
     }
@@ -80,9 +81,9 @@ const ProjectProgressPieChart = () => {
         value={selectedProject}
       >
         <option value="" className="text-center">All Projects</option>
-        {tasks.map((task) => (
-          <option key={task.project_id} value={task.project_name} className="text-center">
-            {task.project_name}
+        {projects.map((projectName) => (
+          <option key={projectName} value={projectName} className="text-center">
+            {projectName}
           </option>
         ))}
       </select>

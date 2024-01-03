@@ -11,25 +11,26 @@ const TaskDetails = () => {
   const [editedTask, setEditedTask] = useState({});
   const [isEditing, setIsEditing] = useState(false);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const taskData = await fetch(`http://localhost:8080/tasks/${taskId}`);
+  async function fetchData() {
+    try {
+      const taskData = await fetch(`http://localhost:8080/tasks/${taskId}`);
 
-        if (taskData.ok) {
-          const task = await taskData.json();
-          setData(task);
-          console.log(task);
+      if (taskData.ok) {
+        const task = await taskData.json();
+        setData(task);
+        console.log(task);
 
-          fetchEmployeeName(task.assignee_id, setAssigneeName);
-          fetchEmployeeName(task.employee_id, setEmployeeName);
-          setEditedTask(task);
-        } else {
-        }
-      } catch (error) {
-        console.error(error.message);
+        fetchEmployeeName(task.assignee_id, setAssigneeName);
+        fetchEmployeeName(task.employee_id, setEmployeeName);
+        setEditedTask(task);
+      } else {
       }
+    } catch (error) {
+      console.error(error.message);
     }
+  }
+
+  useEffect(() => {
     fetchData();
   }, [taskId]);
 
@@ -53,7 +54,7 @@ const TaskDetails = () => {
 
   const handleEditTask = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/tasks/${taskId}`, {
+      const response = await fetch(`http://localhost:8080/tasks/update/${taskId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -64,8 +65,10 @@ const TaskDetails = () => {
       if (response.ok) {
         console.log("Task updated successfully!");
         setIsEditing(false);
+        fetchData();
       } else {
         console.error("Failed to update task");
+        console.log(editedTask)
       }
     } catch (error) {
       console.error(error.message);
@@ -74,27 +77,23 @@ const TaskDetails = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type } = e.target;
-
-    const updatedValue = type === "number" ? parseFloat(value) : value;
-
+  
+    let updatedValue;
+  
+    if (name === "start_date" || name === "end_date") {
+      const date = new Date(value);
+      const isoDate = date.toISOString();
+      updatedValue = isoDate.slice(0, isoDate.indexOf("T"));
+    } else {
+      updatedValue =
+        type === "number" ? parseFloat(value) : type === "date" ? value : value;
+    }
+  
     setEditedTask((prevTask) => ({
       ...prevTask,
       [name]: updatedValue,
     }));
   };
-
-  const {
-    task_name,
-    task_description,
-    project_name,
-    assignee_id,
-    employee_id,
-    employee_name,
-    employee_lastname,
-    task_status_name,
-    start_date,
-    end_date,
-  } = data;
 
   function formatDate(inputDate) {
     const date = new Date(inputDate);
@@ -114,9 +113,7 @@ const TaskDetails = () => {
                   <div className="mb-4">
                     <h2 className="text-3xl text-center">Edit task</h2>
                     <hr className="mt-2 mb-2"></hr>
-                  <p className="text-lg">
-                    Task name: 
-                  </p>
+                    <p className="text-lg">Task name:</p>
                     <input
                       type="text"
                       name="task_name"
@@ -175,21 +172,17 @@ const TaskDetails = () => {
                     />
                   </div>
                   <div className="mb-4">
-                  <p className="text-lg">
-                    Start date: 
-                  </p>
+                    <p className="text-lg">Start date:</p>
                     <input
                       type="date"
                       name="start_date"
-                      value={formatDate(editedTask.start_date)}
+                      value={editedTask.start_date}
                       onChange={handleInputChange}
                       className="mt-1 p-2 border rounded-md w-full"
                     />
                   </div>
                   <div className="mb-4">
-                  <p className="text-lg">
-                    End date: 
-                  </p>
+                    <p className="text-lg">End date:</p>
                     <input
                       type="date"
                       name="end_date"
@@ -199,9 +192,7 @@ const TaskDetails = () => {
                     />
                   </div>
                   <div className="mb-4">
-                  <p className="text-lg">
-                    Employee: 
-                  </p>
+                    <p className="text-lg">Employee:</p>
                     <input
                       type="number"
                       name="employee_id"
@@ -225,15 +216,21 @@ const TaskDetails = () => {
                     </p>
                     <p className="text-lg">Team: {editedTask.team_name}</p>
                     <p className="text-lg">
-                      Assignee: {editedTask.employee_name} {editedTask.employee_lastname}
+                      Assignee: {editedTask.employee_name}{" "}
+                      {editedTask.employee_lastname}
                     </p>
-                    <p className="text-lg">Status: {editedTask.task_status_name}</p>
+                    <p className="text-lg">
+                      Status: {editedTask.task_status_name}
+                    </p>
                     <p className="text-lg">
                       Start Date: {formatDate(editedTask.start_date)}
                     </p>
-                    <p className="text-lg">End Date: {formatDate(editedTask.end_date)}</p>
                     <p className="text-lg">
-                      Employee: {editedTask.employee_name} {editedTask.employee_lastname}
+                      End Date: {formatDate(editedTask.end_date)}
+                    </p>
+                    <p className="text-lg">
+                      Employee: {editedTask.employee_name}{" "}
+                      {editedTask.employee_lastname}
                     </p>
                   </div>
                 </>
@@ -242,18 +239,23 @@ const TaskDetails = () => {
             <div className="flex justify-center mt-4">
               <div className="mr-5">
                 {isEditing ? (
-                  <><button
-                    className="p-3 w-40 bg-black text-white rounded-lg mr-2"
-                    onClick={() => {setIsEditing(false)}}
-                  >
-                    Cancel
-                  </button><button
-                    className="p-3 w-40 bg-blue-500 text-white rounded-lg"
-                    onClick={handleEditTask}
-                  >
+                  <>
+                    <button
+                      className="p-3 w-40 bg-black text-white rounded-lg mr-2"
+                      onClick={() => {
+                        setIsEditing(false);
+                        setEditedTask(data);
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="p-3 w-40 bg-blue-500 text-white rounded-lg"
+                      onClick={handleEditTask}
+                    >
                       Save
-                    </button></>
-                  
+                    </button>
+                  </>
                 ) : (
                   <button
                     className="p-3 w-40 bg-blue-500 text-white rounded-lg"
