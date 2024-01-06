@@ -27,6 +27,8 @@ import {
   deleteTask,
   updateTask,
   deleteTeamMember,
+  getProjectsStatuses,
+  updateProject,
 } from "./server.js";
 
 const app = express();
@@ -233,6 +235,37 @@ app.delete("/projects/delete/:id", async (req, res) => {
     res.sendStatus(204);
   } catch (error) {
     res.status(500).send({ error: "Failed to delete employee." });
+  }
+});
+
+app.get("/projectstatus", async (req, res) => {
+  const projectstatus = await getProjectsStatuses();
+  res.send(projectstatus);
+});
+
+app.put("/projects/update/:id", async (req, res) => {
+  const {
+    project_name,
+    start_date,
+    end_date,
+    project_status,
+    project_description,
+  } = req.body;
+  const projectId = req.params.id;
+
+  const projectUpdate = await updateProject(
+    project_name,
+    start_date,
+    end_date,
+    project_status,
+    project_description,
+    projectId
+  );
+
+  if (projectUpdate > 0) {
+    res.send(`Project with ID ${projectId} updated successfully`);
+  } else {
+    res.status(500).send(`Failed to update task with ID ${projectId}`);
   }
 });
 

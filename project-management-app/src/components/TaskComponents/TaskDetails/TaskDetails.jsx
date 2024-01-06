@@ -8,8 +8,68 @@ const TaskDetails = () => {
   const [data, setData] = useState([]);
   const [assigneeName, setAssigneeName] = useState("");
   const [employeeName, setEmployeeName] = useState("");
-  const [editedTask, setEditedTask] = useState({});
+  const [editedTask, setEditedTask] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [teams, setTeams] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [statuses, setStatuses] = useState([]);
+
+  async function fetchStatuses() {
+    try {
+      const statusData = await fetch("http://localhost:8080/taskstatus");
+
+      if (statusData.ok) {
+        const statusList = await statusData.json();
+        setStatuses(statusList);
+      } else {
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  async function fetchEmployees() {
+    try {
+      const employeesData = await fetch("http://localhost:8080/employees");
+
+      if (employeesData.ok) {
+        const employeesList = await employeesData.json();
+        setEmployees(employeesList);
+      } else {
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  async function fetchTeams() {
+    try {
+      const teamsData = await fetch("http://localhost:8080/teams");
+
+      if (teamsData.ok) {
+        const teamsList = await teamsData.json();
+        setTeams(teamsList);
+      } else {
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  async function fetchProjects() {
+    try {
+      const projectsData = await fetch("http://localhost:8080/projects");
+
+      if (projectsData.ok) {
+        const projectsList = await projectsData.json();
+        setProjects(projectsList);
+      } else {
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
 
   async function fetchData() {
     try {
@@ -32,6 +92,10 @@ const TaskDetails = () => {
 
   useEffect(() => {
     fetchData();
+    fetchProjects();
+    fetchEmployees();
+    fetchStatuses();
+    fetchTeams();
   }, [taskId]);
 
   async function fetchEmployeeName(employeeId, setNameFunction) {
@@ -54,13 +118,16 @@ const TaskDetails = () => {
 
   const handleEditTask = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/tasks/update/${taskId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editedTask),
-      });
+      const response = await fetch(
+        `http://localhost:8080/tasks/update/${taskId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editedTask),
+        }
+      );
 
       if (response.ok) {
         console.log("Task updated successfully!");
@@ -68,7 +135,7 @@ const TaskDetails = () => {
         fetchData();
       } else {
         console.error("Failed to update task");
-        console.log(editedTask)
+        console.log(editedTask);
       }
     } catch (error) {
       console.error(error.message);
@@ -77,9 +144,9 @@ const TaskDetails = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type } = e.target;
-  
+
     let updatedValue;
-  
+
     if (name === "start_date" || name === "end_date") {
       const date = new Date(value);
       const isoDate = date.toISOString();
@@ -88,7 +155,7 @@ const TaskDetails = () => {
       updatedValue =
         type === "number" ? parseFloat(value) : type === "date" ? value : value;
     }
-  
+
     setEditedTask((prevTask) => ({
       ...prevTask,
       [name]: updatedValue,
@@ -133,43 +200,75 @@ const TaskDetails = () => {
                   </div>
                   <div className="mb-4">
                     <p className="text-lg">Project:</p>
-                    <input
-                      type="number"
-                      name="project_id"
+                    <select
                       value={editedTask.project_id}
                       onChange={handleInputChange}
+                      name="project_id"
                       className="mt-1 p-2 border rounded-md w-full"
-                    />
+                    >
+                      {projects.map((project) => (
+                        <option
+                          key={project.project_id}
+                          value={project.project_id}
+                        >
+                          {project.project_name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div className="mb-4">
                     <p className="text-lg">Team:</p>
-                    <input
-                      type="number"
-                      name="team_id"
+                    <select
                       value={editedTask.team_id}
                       onChange={handleInputChange}
+                      name="team_id"
                       className="mt-1 p-2 border rounded-md w-full"
-                    />
+                    >
+                      {teams.map((team) => (
+                        <option
+                          key={team.team_id}
+                          value={team.team_id}
+                        >
+                          {team.team_name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div className="mb-4">
                     <p className="text-lg">Assignee:</p>
-                    <input
-                      type="number"
-                      name="assignee_id"
+                    <select
                       value={editedTask.assignee_id}
                       onChange={handleInputChange}
+                      name="assignee_id"
                       className="mt-1 p-2 border rounded-md w-full"
-                    />
+                    >
+                      {employees.map((employee) => (
+                        <option
+                          key={employee.employee_id}
+                          value={employee.employee_id}
+                        >
+                          {employee.employee_name}{" "}{employee.employee_lastname}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div className="mb-4">
                     <p className="text-lg">Status: </p>
-                    <input
-                      type="number"
-                      name="status"
-                      value={editedTask.status}
+                    <select
+                      value={editedTask.task_status_id}
                       onChange={handleInputChange}
+                      name="task_status_id"
                       className="mt-1 p-2 border rounded-md w-full"
-                    />
+                    >
+                      {statuses.map((status) => (
+                        <option
+                          key={status.task_status_id}
+                          value={status.task_status_id}
+                        >
+                          {status.task_status_name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div className="mb-4">
                     <p className="text-lg">Start date:</p>
@@ -193,13 +292,21 @@ const TaskDetails = () => {
                   </div>
                   <div className="mb-4">
                     <p className="text-lg">Employee:</p>
-                    <input
-                      type="number"
-                      name="employee_id"
+                    <select
                       value={editedTask.employee_id}
                       onChange={handleInputChange}
+                      name="employee_id"
                       className="mt-1 p-2 border rounded-md w-full"
-                    />
+                    >
+                      {employees.map((employee) => (
+                        <option
+                          key={employee.employee_id}
+                          value={employee.employee_id}
+                        >
+                          {employee.employee_name}{" "}{employee.employee_lastname}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </>
               ) : (

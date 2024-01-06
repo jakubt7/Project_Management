@@ -28,21 +28,25 @@ const ProjectTable = () => {
     setActiveColumn(col);
   };
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const projectData = await fetch("http://localhost:8080/projects");
 
-        if (!projectData.ok) {
-          console.log("There was an error fetching from the API");
-        } else {
-          const data = await projectData.json();
-          setData(data);
-        }
-      } catch (error) {
-        console.error(error.message);
+  async function fetchData() {
+    try {
+      const projectData = await fetch("http://localhost:8080/projects");
+
+      if (!projectData.ok) {
+        console.log("There was an error fetching from the API");
+      } else {
+        const data = await projectData.json();
+        setData(data);
       }
+    } catch (error) {
+      console.error(error.message);
     }
+  }
+ 
+  
+
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -62,6 +66,8 @@ const ProjectTable = () => {
 
         if (response.ok) {
           console.log("Project deleted successfully");
+          fetchData();
+
         } else {
           console.log("Error encountered while deleting the project");
         }

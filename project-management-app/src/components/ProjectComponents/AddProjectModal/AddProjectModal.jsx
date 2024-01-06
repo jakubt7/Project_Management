@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import Select from "../../Select/Select";
 
 const AddProjectModal = ({ isOpen, onClose, onAddProject }) => {
   const nameRef = useRef();
@@ -97,19 +98,15 @@ const AddProjectModal = ({ isOpen, onClose, onAddProject }) => {
                 required
                 className="w-full border rounded py-2 px-3 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
-              <label className="block text-sm font-medium text-gray-600 mb-2">
-                Status:
-              </label>
-              <select
-                type="text"
-                name="status"
-                ref={statusRef}
+              <Select
+                api="http://localhost:8080/projectstatus"
+                label="Status"
+                column="project_status_name"
+                id="project_status_id"
                 required
+                ref={statusRef}
                 className="w-full border rounded py-2 px-3 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              >
-                <option value="1">Active</option>
-                <option value="2">Completed</option>
-              </select>
+              />
               <label className="block text-sm font-medium text-gray-600 mb-2">
                 Description:
               </label>

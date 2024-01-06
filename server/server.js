@@ -45,7 +45,6 @@ export async function createTeam(name) {
   return result.insertId;
 }
 
-
 ////////////////////////////////////////////
 // EMPLOYEE REQUESTS
 
@@ -151,7 +150,7 @@ export async function createTask(
   end_date,
   employee_id
 ) {
-  const [result] = await pool.query (
+  const [result] = await pool.query(
     `
     INSERT INTO Tasks (task_name, task_description, project_id, team_id, assignee_id, status, start_date, end_date, employee_id)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -311,6 +310,37 @@ export async function deleteProject(projectId) {
   );
 
   return result.affectedRows === 1;
+}
+
+export async function getProjectsStatuses() {
+  const [rows] = await pool.query(`
+    SELECT * 
+    FROM ProjectStatus`);
+  return rows;
+}
+
+export async function updateProject(
+  project_name,
+  start_date,
+  end_date,
+  project_status,
+  project_description,
+  project_id
+) {
+  const [result] = await pool.query(
+    `
+    UPDATE projects 
+    SET 
+    project_name = ?,
+    start_date = ?,
+    end_date = ?,
+    project_status = ?,
+    project_description = ?
+    WHERE project_id = ?
+  `,
+    [project_name, start_date, end_date, project_status, project_description, project_id]
+  );
+  return result.affectedRows;
 }
 
 ////////////////////////////////////////////
