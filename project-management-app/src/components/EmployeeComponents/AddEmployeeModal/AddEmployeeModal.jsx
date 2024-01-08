@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import Select from "../../Select/Select";
 
 const AddEmployeeModal = ({ isOpen, onClose, onAddEmployee }) => {
   const firstNameRef = useRef();
@@ -83,18 +84,15 @@ const AddEmployeeModal = ({ isOpen, onClose, onAddEmployee }) => {
                 required
                 className="w-full border rounded py-2 px-3 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
-              <label className="block text-sm font-medium text-gray-600 mb-2">
-                Position:
-              </label>
-              <select
-                name="position"
-                ref={positionRef}
+              <Select
+                api="http://localhost:8080/employeepositions"
+                label="Position"
+                column="employee_position"
+                id="employee_position_id"
                 required
+                ref={positionRef}
                 className="w-full border rounded py-2 px-3 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              >
-                <option value="2">Frontend Developer</option>
-                <option value="3">Backend Developer</option>
-              </select>
+              />
               <label className="block text-sm font-medium text-gray-600 mb-2">
                 E-mail:
               </label>
