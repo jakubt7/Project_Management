@@ -109,27 +109,33 @@ const ProjectDetails = () => {
   const handleInputChange = (e) => {
     const { name, value, type } = e.target;
 
-    let updatedValue;
+    setEditedProject((prevProject) => {
+      let updatedValue;
 
-    if (name === "start_date" || name === "end_date") {
-      const date = new Date(value);
-      const isoDate = date.toISOString();
-      updatedValue = isoDate.slice(0, isoDate.indexOf("T"));
-    } else {
-      updatedValue =
-        type === "number" ? parseFloat(value) : type === "date" ? value : value;
-    }
+      if (name === "start_date" || name === "end_date") {
+        const date = new Date(value);
+        const isoDate = date.toISOString();
+        updatedValue = isoDate.slice(0, isoDate.indexOf("T"));
+      } else {
+        updatedValue = type === "number" ? parseFloat(value) : value;
+      }
 
-    setEditedProject((prevProject) => ({
-      ...prevProject,
-      [name]: updatedValue,
-    }));
+      return {
+        ...prevProject,
+        [name]: updatedValue,
+      };
+    });
   };
+
+  useEffect(() => {
+    console.log("After state update - editedProject:", editedProject);
+  }, [editedProject]);
+  
 
   function formatDate(inputDate) {
     const date = new Date(inputDate);
     const options = { day: "2-digit", month: "2-digit", year: "numeric" };
-    return date.toLocaleDateString("en-US", options);
+    return date.toLocaleDateString("en-GB", options);
   }
 
   return (
@@ -158,9 +164,9 @@ const ProjectDetails = () => {
                     </h2>
                     <p>
                       <select
-                        value={editedProject.project_status_name}
+                        value={editedProject.project_status}
                         onChange={handleInputChange}
-                        name="project_status_id"
+                        name="project_status"
                         className="mt-1 p-2 border rounded-md w-full"
                       >
                         {statuses.map((status) => (

@@ -9,6 +9,7 @@ import {
   getEmployee,
   createEmployee,
   deleteEmployee,
+  updateEmployee,
   getTasks,
   getTask,
   createTask,
@@ -29,6 +30,7 @@ import {
   deleteTeamMember,
   getProjectsStatuses,
   updateProject,
+  getEmployeePositions,
 } from "./server.js";
 
 const app = express();
@@ -96,6 +98,36 @@ app.delete("/employees/delete/:id", async (req, res) => {
     res
       .status(500)
       .send({ error: "Failed to delete employee.", message: error.message });
+  }
+});
+
+app.get("/employeepositions", async (req, res) => {
+  const positions = await getEmployeePositions();
+  res.send(positions);
+});
+
+app.put("/employees/update/:id", async (req, res) => {
+  const {
+    employee_name,
+    employee_lastname,
+    employee_position,
+    employee_email,
+  } = req.body;
+
+  const empId = req.params.id;
+
+  const empUpdate = await updateEmployee(
+    employee_name,
+    employee_lastname,
+    employee_position,
+    employee_email,
+    empId
+  );
+
+  if (empUpdate > 0) {
+    res.send(`Employee with ID ${empId} updated successfully`);
+  } else {
+    res.status(500).send(`Failed to update task with ID ${empId}`);
   }
 });
 

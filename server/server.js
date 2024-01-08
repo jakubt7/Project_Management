@@ -94,6 +94,41 @@ export async function deleteEmployee(employeeId) {
   return result.affectedRows === 1;
 }
 
+export async function getEmployeePositions() {
+  const [rows] = await pool.query(`
+  SELECT * 
+  FROM EmployeePositions `);
+  return rows;
+}
+
+export async function updateEmployee(
+  employee_name,
+  employee_lastname,
+  employee_position,
+  employee_email,
+  employee_id
+) {
+  const [result] = await pool.query(
+    `
+    UPDATE employees 
+    SET 
+    employee_name = ?,
+    employee_lastname = ?,
+    employee_position = ?,
+    employee_email = ?
+    WHERE employee_id = ?
+  `,
+    [
+      employee_name,
+      employee_lastname,
+      employee_position,
+      employee_email,
+      employee_id,
+    ]
+  );
+  return result.affectedRows;
+}
+
 ////////////////////////////////////////////
 // TASK REQUESTS
 
@@ -338,7 +373,14 @@ export async function updateProject(
     project_description = ?
     WHERE project_id = ?
   `,
-    [project_name, start_date, end_date, project_status, project_description, project_id]
+    [
+      project_name,
+      start_date,
+      end_date,
+      project_status,
+      project_description,
+      project_id,
+    ]
   );
   return result.affectedRows;
 }

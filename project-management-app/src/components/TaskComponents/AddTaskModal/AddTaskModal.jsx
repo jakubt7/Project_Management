@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import Select from "../../Select/Select";
 
-const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
+const AddTaskModal = ({ isOpen, onClose, onAddTask, onAddTaskSuccess }) => {
   const nameRef = useRef();
   const descriptionRef = useRef();
   const projectRef = useRef();
@@ -15,7 +15,6 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
 
     const name = nameRef.current.value;
     const description = descriptionRef.current.value;
@@ -41,7 +40,6 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
 
     setIsPending(true);
 
-
     try {
       const response = await fetch("http://localhost:8080/tasks", {
         method: "POST",
@@ -63,6 +61,8 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
         endRef.current.value = "";
         employeeRef.current.value = "";
         onAddTask();
+        onAddTaskSuccess(task);
+        console.log(task);
       } else {
         console.error("Unable to add a task");
       }
@@ -73,7 +73,6 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
     }
   };
 
-  
   return (
     <div
       className={

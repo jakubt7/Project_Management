@@ -255,9 +255,9 @@ const TaskDetails = () => {
                   <div className="mb-4">
                     <p className="text-lg">Status: </p>
                     <select
-                      value={editedTask.task_status_id}
+                      value={editedTask.status}
                       onChange={handleInputChange}
-                      name="task_status_id"
+                      name="status"
                       className="mt-1 p-2 border rounded-md w-full"
                     >
                       {statuses.map((status) => (

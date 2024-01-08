@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AddTaskModal from "../AddTaskModal/AddTaskModal";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const TaskList = () => {
   const [data, setData] = useState([]);
@@ -9,6 +11,42 @@ const TaskList = () => {
   const [order, setOrder] = useState("ASC");
   const [activeColumn, setActiveColumn] = useState(null);
   const [searchInput, setSearchInput] = useState("");
+
+  const notifyOnAdd = (message) => {
+    toast.info(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      style: {
+        fontSize: "14px",
+        fontWeight: "bold"
+      },
+    });
+  };
+
+  const handleAddTaskSuccess = async (task) => {
+    try {
+      const projectResponse = await fetch(
+        `http://localhost:8080/projects/${task.project_id}`
+      );
+
+      if (projectResponse.ok) {
+        const projectData = await projectResponse.json();
+        const projectName = projectData.project_name;
+
+        notifyOnAdd(`NEW TASK: ${task.name} ASSIGNED TO: ${projectName}`);
+      } else {
+        console.error("Unable to fetch project details");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const sorting = (col) => {
     if (order === "ASC") {
@@ -109,6 +147,19 @@ const TaskList = () => {
 
   return (
     <div className="flex justify-center mt-5 mb-5">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <ToastContainer />
       <div className="w-5/6">
         <div className="bg-white p-4 shadow-md rounded-lg mb-4">
           <div className="flex justify-between items-center">
@@ -179,9 +230,7 @@ const TaskList = () => {
                 .filter((task) => {
                   return searchInput.toLowerCase() === ""
                     ? task
-                    : task.task_name
-                        .toLowerCase()
-                        .includes(searchInput);
+                    : task.task_name.toLowerCase().includes(searchInput);
                 })
                 .map((task) => (
                   <tr className="border-b hover:bg-gray-100" key={task.task_id}>
@@ -227,6 +276,7 @@ const TaskList = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onAddTask={handleAddTask}
+        onAddTaskSuccess={handleAddTaskSuccess}
       />
     </div>
   );
