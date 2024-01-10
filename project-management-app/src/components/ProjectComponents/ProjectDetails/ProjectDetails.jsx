@@ -138,6 +138,9 @@ const ProjectDetails = () => {
     return date.toLocaleDateString("en-GB", options);
   }
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isAdmin = user && user.role === "admin";
+
   return (
     <div className="projectDetails">
       <AppHeader />
@@ -248,6 +251,8 @@ const ProjectDetails = () => {
             </div>
             <div className="flex justify-center mt-4">
               <div className="mr-5">
+              {isAdmin && (
+                <>
                 {isEditing ? (
                   <>
                     <button
@@ -274,6 +279,8 @@ const ProjectDetails = () => {
                     Edit project
                   </button>
                 )}
+                </>
+              )}
               </div>
             </div>
           </div>

@@ -98,6 +98,9 @@ const ProjectTable = () => {
     setIsModalOpen(false);
   };
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isAdmin = user && user.role === "admin";
+
   function formatDate(inputDate) {
     const date = new Date(inputDate);
     const options = { day: "2-digit", month: "2-digit", year: "numeric" };
@@ -118,12 +121,14 @@ const ProjectTable = () => {
                 onChange={(e) => setSearchInput(e.target.value)}
               ></input>
             </div>
+            {isAdmin && (
             <button
               onClick={() => setIsModalOpen(true)}
               className="btn bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
             >
               Add Project
             </button>
+            )}
           </div>
         </div>
         <div className="bg-white rounded-lg shadow-md">
@@ -192,6 +197,8 @@ const ProjectTable = () => {
                     >
                       More
                     </Link>
+                    {isAdmin && (
+                      <>
                     <Link
                       to={`/projects/edit/${project.project_id}`}
                       className="text-gray-500 hover:underline hover:text-gray-700 ml-4"
@@ -204,6 +211,8 @@ const ProjectTable = () => {
                     >
                       Delete
                     </button>
+                    </>
+                    )}
                   </td>
                 </tr>
               ))}

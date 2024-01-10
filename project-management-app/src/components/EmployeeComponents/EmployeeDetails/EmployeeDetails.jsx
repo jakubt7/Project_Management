@@ -76,7 +76,7 @@ const EmployeeDetails = () => {
     fetchEmployeeData();
     fetchTasksData();
     fetchTeamsData();
-    fetchEmployeePositions()
+    fetchEmployeePositions();
   }, [empId]);
 
   const handleEditEmployee = async () => {
@@ -115,13 +115,16 @@ const EmployeeDetails = () => {
       let updatedValue;
 
       updatedValue = type === "number" ? parseFloat(value) : value;
-    
+
       return {
         ...prevEmployee,
         [name]: updatedValue,
       };
     });
   };
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isAdmin = user && user.role === "admin";
 
   return (
     <div className="employeeDetails">
@@ -155,7 +158,7 @@ const EmployeeDetails = () => {
                       />
                     </h2>
                     <p>
-                    <select
+                      <select
                         value={editedEmployee.employee_position}
                         onChange={handleInputChange}
                         name="employee_position"
@@ -184,7 +187,8 @@ const EmployeeDetails = () => {
                 ) : (
                   <>
                     <h2 className="text-2xl font-semibold">
-                      {employeeData.employee_name} {employeeData.employee_lastname}
+                      {employeeData.employee_name}{" "}
+                      {employeeData.employee_lastname}
                     </h2>
                     <p>{employeeData.employee_position}</p>
                     <p>{employeeData.employee_email}</p>
@@ -210,31 +214,35 @@ const EmployeeDetails = () => {
             </div>
             <div className="flex justify-center mt-4">
               <div className="mr-5">
-                {isEditing ? (
+                {isAdmin && (
                   <>
-                    <button
-                      className="p-3 w-40 bg-black text-white rounded-lg mr-2"
-                      onClick={() => {
-                        setIsEditing(false);
-                        setEditedEmployee(employeeData);
-                      }}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      className="p-3 w-40 bg-blue-500 text-white rounded-lg"
-                      onClick={handleEditEmployee}
-                    >
-                      Save
-                    </button>
+                    {isEditing ? (
+                      <>
+                        <button
+                          className="p-3 w-40 bg-black text-white rounded-lg mr-2"
+                          onClick={() => {
+                            setIsEditing(false);
+                            setEditedEmployee(employeeData);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="p-3 w-40 bg-blue-500 text-white rounded-lg"
+                          onClick={handleEditEmployee}
+                        >
+                          Save
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        className="p-3 w-40 bg-blue-500 text-white rounded-lg"
+                        onClick={() => setIsEditing(true)}
+                      >
+                        Edit employee
+                      </button>
+                    )}
                   </>
-                ) : (
-                  <button
-                    className="p-3 w-40 bg-blue-500 text-white rounded-lg"
-                    onClick={() => setIsEditing(true)}
-                  >
-                    Edit employee
-                  </button>
                 )}
               </div>
             </div>

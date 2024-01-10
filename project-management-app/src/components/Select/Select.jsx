@@ -22,6 +22,7 @@ const Select = forwardRef(({ api, label, column, id }, ref ) => {
         value={selectedOption}
         onChange={(e) => setSelectedOption(e.target.value)}
         ref={ref}
+        className="w-full border rounded py-2 px-3 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       >
         {data.map((item) => (
           <option key={item[id]} value={item[id]}>

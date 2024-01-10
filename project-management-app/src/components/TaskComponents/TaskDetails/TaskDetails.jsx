@@ -168,6 +168,9 @@ const TaskDetails = () => {
     return date.toLocaleDateString("en-GB", options);
   }
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isAdmin = user && user.role === "admin";
+
   return (
     <div className="taskDetails">
       <AppHeader />
@@ -225,10 +228,7 @@ const TaskDetails = () => {
                       className="mt-1 p-2 border rounded-md w-full"
                     >
                       {teams.map((team) => (
-                        <option
-                          key={team.team_id}
-                          value={team.team_id}
-                        >
+                        <option key={team.team_id} value={team.team_id}>
                           {team.team_name}
                         </option>
                       ))}
@@ -247,7 +247,7 @@ const TaskDetails = () => {
                           key={employee.employee_id}
                           value={employee.employee_id}
                         >
-                          {employee.employee_name}{" "}{employee.employee_lastname}
+                          {employee.employee_name} {employee.employee_lastname}
                         </option>
                       ))}
                     </select>
@@ -303,7 +303,7 @@ const TaskDetails = () => {
                           key={employee.employee_id}
                           value={employee.employee_id}
                         >
-                          {employee.employee_name}{" "}{employee.employee_lastname}
+                          {employee.employee_name} {employee.employee_lastname}
                         </option>
                       ))}
                     </select>
@@ -345,31 +345,35 @@ const TaskDetails = () => {
             </div>
             <div className="flex justify-center mt-4">
               <div className="mr-5">
-                {isEditing ? (
+                {isAdmin && (
                   <>
-                    <button
-                      className="p-3 w-40 bg-black text-white rounded-lg mr-2"
-                      onClick={() => {
-                        setIsEditing(false);
-                        setEditedTask(data);
-                      }}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      className="p-3 w-40 bg-blue-500 text-white rounded-lg"
-                      onClick={handleEditTask}
-                    >
-                      Save
-                    </button>
+                    {isEditing ? (
+                      <>
+                        <button
+                          className="p-3 w-40 bg-black text-white rounded-lg mr-2"
+                          onClick={() => {
+                            setIsEditing(false);
+                            setEditedTask(data);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="p-3 w-40 bg-blue-500 text-white rounded-lg"
+                          onClick={handleEditTask}
+                        >
+                          Save
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        className="p-3 w-40 bg-blue-500 text-white rounded-lg"
+                        onClick={() => setIsEditing(true)}
+                      >
+                        Edit task
+                      </button>
+                    )}
                   </>
-                ) : (
-                  <button
-                    className="p-3 w-40 bg-blue-500 text-white rounded-lg"
-                    onClick={() => setIsEditing(true)}
-                  >
-                    Edit task
-                  </button>
                 )}
               </div>
             </div>

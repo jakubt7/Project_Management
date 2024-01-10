@@ -107,6 +107,9 @@ const EmployeeTable = () => {
     fetchData();
   };
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isAdmin = user && user.role === "admin";
+
   return (
     <div className="flex justify-center h-screen mt-5">
       <div className="w-5/6">
@@ -116,17 +119,19 @@ const EmployeeTable = () => {
             <div className="border-solid border-gray-400 border-2 rounded-lg w-1/4">
               <input
                 type="text"
-                class="bg-white h-10 w-full px-4 rounded-lg focus:outline-none hover:cursor-pointer"
+                className="bg-white h-10 w-full px-4 rounded-lg focus:outline-none hover:cursor-pointer"
                 placeholder="Search employees"
                 onChange={(e) => setSearchInput(e.target.value)}
-              ></input>
+              />
             </div>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="btn bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
-            >
-              Add Employee
-            </button>
+            {isAdmin && (
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="btn bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
+              >
+                Add Employee
+              </button>
+            )}
           </div>
         </div>
         <div className="bg-white rounded-lg shadow-md">
@@ -207,18 +212,22 @@ const EmployeeTable = () => {
                       >
                         More
                       </Link>
-                      <Link
-                        to={`/employees/edit/${employee.employee_id}`}
-                        className="text-gray-500 hover:underline hover:text-gray-700 ml-4"
-                      >
-                        Edit
-                      </Link>
-                      <button
-                        className="text-red-500 hover:underline hover:text-red-700 ml-4"
-                        onClick={() => handleDelete(employee.employee_id)}
-                      >
-                        Delete
-                      </button>
+                      {isAdmin && (
+                        <>
+                          <Link
+                            to={`/employees/edit/${employee.employee_id}`}
+                            className="text-gray-500 hover:underline hover:text-gray-700 ml-4"
+                          >
+                            Edit
+                          </Link>
+                          <button
+                            className="text-red-500 hover:underline hover:text-red-700 ml-4"
+                            onClick={() => handleDelete(employee.employee_id)}
+                          >
+                            Delete
+                          </button>
+                        </>
+                      )}
                     </td>
                   </tr>
                 ))}

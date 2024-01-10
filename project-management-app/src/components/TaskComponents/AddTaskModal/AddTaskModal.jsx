@@ -10,7 +10,6 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask, onAddTaskSuccess }) => {
   const statusRef = useRef();
   const startRef = useRef();
   const endRef = useRef();
-  const employeeRef = useRef();
   const [isPending, setIsPending] = useState(false);
 
   const handleSubmit = async (event) => {
@@ -24,7 +23,6 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask, onAddTaskSuccess }) => {
     const status = statusRef.current.value;
     const start = startRef.current.value;
     const end = endRef.current.value;
-    const employee = employeeRef.current.value;
 
     const task = {
       name: name,
@@ -35,7 +33,6 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask, onAddTaskSuccess }) => {
       status: status,
       start_date: start,
       end_date: end,
-      employee_id: employee,
     };
 
     setIsPending(true);
@@ -59,7 +56,6 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask, onAddTaskSuccess }) => {
         statusRef.current.value = "";
         startRef.current.value = "";
         endRef.current.value = "";
-        employeeRef.current.value = "";
         onAddTask();
         onAddTaskSuccess(task);
         console.log(task);
@@ -156,14 +152,6 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask, onAddTaskSuccess }) => {
                 ref={endRef}
                 required
                 className="w-full border rounded py-2 px-3 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              />
-              <Select
-                api="http://localhost:8080/employees"
-                label="Employee"
-                column="employee_name"
-                id="employee_id"
-                required
-                ref={employeeRef}
               />
               <div className="flex justify-center gap-6 mt-4">
                 <button

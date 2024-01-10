@@ -11,6 +11,11 @@ const TaskList = () => {
   const [order, setOrder] = useState("ASC");
   const [activeColumn, setActiveColumn] = useState(null);
   const [searchInput, setSearchInput] = useState("");
+  const [employeeId, setEmployeeId] = useState("");
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isAdmin = user && user.role === "admin";
+
 
   const notifyOnAdd = (message) => {
     toast.info(message, {
@@ -65,39 +70,73 @@ const TaskList = () => {
     setActiveColumn(col);
   };
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const taskData = await fetch("http://localhost:8080/tasks");
+  async function fetchData() {
+    try {
+      const taskData = await fetch("http://localhost:8080/tasks");
 
-        if (!taskData.ok) {
-          console.log("There was an error fetching from the API");
+      if (!taskData.ok) {
+        console.log("There was an error fetching from the API");
+      } else {
+        const data = await taskData.json();
+        setData(data);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  async function fetchDataById(id) {
+    try {
+      const taskData = await fetch(`http://localhost:8080/tasks/user/${id}`);
+
+      if (taskData.ok) {
+        const task = await taskData.json();
+        setData(task);
+        console.log(task);
+        setEditedTask(task);
+      } else {
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  useEffect(() => {
+    if (user) {
+      setEmployeeId(user.employee_id);
+    }
+  
+    const fetchData = async () => {
+      try {
+        if (isAdmin) {
+          const taskData = await fetch("http://localhost:8080/tasks");
+  
+          if (taskData.ok) {
+            const data = await taskData.json();
+            setData(data);
+          } else {
+            console.log("There was an error fetching from the API");
+          }
         } else {
-          const data = await taskData.json();
-          setData(data);
+          const taskData = await fetch(`http://localhost:8080/tasks/user/${employeeId}`);
+  
+          if (taskData.ok) {
+            const task = await taskData.json();
+            setData(task);
+          } else {
+            console.log("Error fetching user-specific tasks");
+          }
         }
       } catch (error) {
         console.error(error.message);
       }
-    }
+    };
+  
     fetchData();
-  }, []);
+  }, [isAdmin, employeeId]);
+  
 
   const handleAddTask = async () => {
-    async function fetchData() {
-      try {
-        const taskData = await fetch("http://localhost:8080/tasks");
-
-        if (!taskData.ok) {
-          console.log("There was an error fetching from the API");
-        } else {
-          const data = await taskData.json();
-          setData(data);
-        }
-      } catch (error) {
-        console.error(error.message);
-      }
-    }
     fetchData();
     setIsModalOpen(false);
   };
@@ -127,23 +166,9 @@ const TaskList = () => {
     } else {
       return false;
     }
-
-    async function fetchData() {
-      try {
-        const taskData = await fetch("http://localhost:8080/tasks");
-
-        if (!taskData.ok) {
-          console.log("There was an error fetching from the API");
-        } else {
-          const data = await taskData.json();
-          setData(data);
-        }
-      } catch (error) {
-        console.error(error.message);
-      }
-    }
     fetchData();
   };
+
 
   return (
     <div className="flex justify-center mt-5 mb-5">
@@ -172,12 +197,14 @@ const TaskList = () => {
                 onChange={(e) => setSearchInput(e.target.value)}
               ></input>
             </div>
+            {isAdmin && (
             <button
               onClick={() => setIsModalOpen(true)}
               className="btn bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
             >
               Add Task
             </button>
+            )}
           </div>
         </div>
         <div className="bg-white rounded-lg shadow-md">
@@ -253,6 +280,8 @@ const TaskList = () => {
                       >
                         More
                       </Link>
+                      {isAdmin && (
+                        <>
                       <Link
                         to={""}
                         className="text-gray-500 hover:underline hover:text-gray-700 ml-4"
@@ -265,6 +294,7 @@ const TaskList = () => {
                       >
                         Delete
                       </button>
+                      </> )}
                     </td>
                   </tr>
                 ))}
