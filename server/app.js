@@ -31,6 +31,13 @@ import {
   getProjectsStatuses,
   updateProject,
   getEmployeePositions,
+  handleLogin,
+  deleteTeam,
+  getTasksById,
+  updateTaskStatus,
+  getNotifications,
+  createNotification,
+  updateNotificationStatus,
 } from "./server.js";
 
 const app = express();
@@ -43,6 +50,44 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json());
+
+// USER REQUESTS
+app.post("/check-user", async (req, res) => {
+  await handleLogin(req, res);
+});
+
+// NOTIFICATION REQUESTS
+app.post("/notifications/create", async (req, res) => {
+  const { employee_id, task_id } = req.body;
+
+  try {
+    const notificationId = await createNotification(employee_id, task_id);
+    res.status(201).send({ notification_id: notificationId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "Failed to create notification." });
+  }
+});
+
+app.get("/notifications/:id", async (req, res) => {
+  const id = req.params.id;
+  const notifications = await getNotifications(id);
+  res.send(notifications);
+});
+
+app.put("/notifications/update/:id", async (req, res) => {
+  const id = req.params.id;
+
+  const notificationUpdate = await updateNotificationStatus(
+    id
+  );
+
+  if (notificationUpdate > 0) {
+    res.send(`Notification with ID ${id} updated successfully`);
+  } else {
+    res.status(500).send(`Failed to update task with ID ${id}`);
+  }
+});
 
 // TEAM REQUESTS
 
@@ -61,6 +106,18 @@ app.post("/teams", async (req, res) => {
   const { name } = req.body;
   const team = await createTeam(name);
   res.status(201).send(team);
+});
+
+app.delete("/teams/delete/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    await deleteTeam(id);
+    res.sendStatus(204);
+  } catch (error) {
+    res
+      .status(500)
+      .send({ error: "Failed to delete team.", message: error.message });
+  }
 });
 
 ////////////////////////////////////////////
@@ -145,6 +202,12 @@ app.get("/tasks/:id", async (req, res) => {
   res.send(task);
 });
 
+app.get("/tasks/user/:id", async (req, res) => {
+  const id = req.params.id;
+  const task = await getTasksById(id);
+  res.send(task);
+});
+
 app.post("/tasks", async (req, res) => {
   const {
     name,
@@ -181,7 +244,6 @@ app.put("/tasks/update/:id", async (req, res) => {
     status,
     start_date,
     end_date,
-    employee_id,
   } = req.body;
   const taskId = req.params.id;
 
@@ -194,7 +256,25 @@ app.put("/tasks/update/:id", async (req, res) => {
     status,
     start_date,
     end_date,
-    employee_id,
+    taskId
+  );
+
+  if (taskUpdate > 0) {
+    res.send(`Task with ID ${taskId} updated successfully`);
+  } else {
+    res.status(500).send(`Failed to update task with ID ${taskId}`);
+  }
+});
+
+app.put("/tasks/update/status/:id", async (req, res) => {
+  const {
+    status,
+  } = req.body;
+
+  const taskId = req.params.id;
+
+  const taskUpdate = await updateTaskStatus(
+    status,
     taskId
   );
 

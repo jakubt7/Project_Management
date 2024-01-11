@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AddTaskModal from "../AddTaskModal/AddTaskModal";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const TaskList = () => {
   const [data, setData] = useState([]);
@@ -16,42 +14,6 @@ const TaskList = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const isAdmin = user && user.role === "admin";
 
-
-  const notifyOnAdd = (message) => {
-    toast.info(message, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      style: {
-        fontSize: "14px",
-        fontWeight: "bold"
-      },
-    });
-  };
-
-  const handleAddTaskSuccess = async (task) => {
-    try {
-      const projectResponse = await fetch(
-        `http://localhost:8080/projects/${task.project_id}`
-      );
-
-      if (projectResponse.ok) {
-        const projectData = await projectResponse.json();
-        const projectName = projectData.project_name;
-
-        notifyOnAdd(`NEW TASK: ${task.name} ASSIGNED TO: ${projectName}`);
-      } else {
-        console.error("Unable to fetch project details");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
 
   const sorting = (col) => {
     if (order === "ASC") {
@@ -172,19 +134,6 @@ const TaskList = () => {
 
   return (
     <div className="flex justify-center mt-5 mb-5">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      <ToastContainer />
       <div className="w-5/6">
         <div className="bg-white p-4 shadow-md rounded-lg mb-4">
           <div className="flex justify-between items-center">
@@ -192,7 +141,7 @@ const TaskList = () => {
             <div className="border-solid border-gray-400 border-2 rounded-lg w-1/4">
               <input
                 type="text"
-                class="bg-white h-10 w-full px-4 rounded-lg focus:outline-none hover:cursor-pointer"
+                className="bg-white h-10 w-full px-4 rounded-lg focus:outline-none hover:cursor-pointer"
                 placeholder="Search tasks"
                 onChange={(e) => setSearchInput(e.target.value)}
               ></input>
@@ -306,7 +255,6 @@ const TaskList = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onAddTask={handleAddTask}
-        onAddTaskSuccess={handleAddTaskSuccess}
       />
     </div>
   );
