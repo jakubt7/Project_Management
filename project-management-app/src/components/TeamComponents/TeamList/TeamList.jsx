@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./TeamList.scss";
 import { Link } from "react-router-dom";
 import AddTeamModal from "../AddTeamModal/AddTeamModal";
+import SearchIcon from "@mui/icons-material/Search";
 
 
 const TeamList = () => {
@@ -42,13 +43,14 @@ const TeamList = () => {
         <div className="bg-white p-4 shadow-md rounded-lg mb-4">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-2xl text-gray-800">Team List</h2>
-            <div className="border-solid border-gray-400 border-2 rounded-lg w-1/4">
+            <div className="border-solid border-gray-400 border-2 rounded-lg w-1/4 flex items-center">
               <input
                 type="text"
-                class="bg-white h-10 w-full px-4 rounded-lg focus:outline-none hover:cursor-pointer"
+                className="bg-white h-10 w-full px-4 rounded-lg focus:outline-none hover:cursor-pointer"
                 placeholder="Search teams"
                 onChange={(e) => setSearchInput(e.target.value)}
               ></input>
+              <SearchIcon className="mr-3 text-gray-500" />
             </div>
             {isAdmin && (
             <button

@@ -72,6 +72,19 @@ const AppHeader = () => {
     }
   };
 
+  function formatDateTime(inputDate) {
+    const date = new Date(inputDate);
+    const options = {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    };
+    return date.toLocaleString("en-GB", options).replace(/,/g, '');
+  }
+
   return (
     <div className="appHeader">
       <div className="text-3xl mt-12 mb-12 text-sky-950 text-center">
@@ -134,7 +147,7 @@ const AppHeader = () => {
                       key={notification.notification_id}
                     >
                       TASK: {notification.task_name} ASSIGNED TO:{" "}
-                      {notification.project_name}
+                      {notification.project_name} - {formatDateTime(notification.created_at)}
                       <RemoveRedEyeIcon
                         className="self-center ml-2 :hover:text-gray-300 cursor-pointer"
                         onClick={() =>

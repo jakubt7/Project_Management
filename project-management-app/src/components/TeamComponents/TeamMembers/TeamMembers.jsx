@@ -115,12 +115,12 @@ const TeamMembers = () => {
               </div>
               <img
                 src="https://picsum.photos/200/200"
-                alt={`team picture`}
+                alt="Team picture"
                 className="rounded-full h-32 w-32 object-cover mx-auto mb-4"
               />
               <div className="text-center">
                 <h2 className="font-medium text-gray-800 text-xl">
-                  {/* {data.team_name} */}
+                  {data.team_name}
                 </h2>
               </div>
               <div className="membersList flex justify-center items-center mt-2">
@@ -140,7 +140,7 @@ const TeamMembers = () => {
                             alt={`${data.team_name}`}
                             className="rounded-full h-12 w-12 object-cover mr-8 content-center"
                           />
-                          <div className="text-center self-center">
+                          <div className="text-center self-center w-40">
                             <div className="font-medium text-gray-800">
                               <div className="text-lg">
                                 {member.employee_name}{" "}
@@ -151,12 +151,10 @@ const TeamMembers = () => {
                         </div>
                       </Link>
                       {isAdmin && (
-                        <button
-                          className="bg-red-500 hover:bg-red-600 text-white font-bold ml-4 py-1/2 px-2 rounded"
+                        <CloseIcon
+                          className="bg-red-500 hover:bg-red-600 text-white m-2 rounded"
                           onClick={() => handleDelete(member.team_member_id)}
-                        >
-                          X
-                        </button>
+                        />
                       )}
                     </div>
                   ))}

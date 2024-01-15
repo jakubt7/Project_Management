@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AddTaskModal from "../AddTaskModal/AddTaskModal";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import InfoIcon from "@mui/icons-material/Info";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SearchIcon from '@mui/icons-material/Search';
 
 const TaskList = () => {
   const [data, setData] = useState([]);
@@ -10,6 +13,7 @@ const TaskList = () => {
   const [activeColumn, setActiveColumn] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const [employeeId, setEmployeeId] = useState("");
+  
 
   const user = JSON.parse(localStorage.getItem("user"));
   const isAdmin = user && user.role === "admin";
@@ -138,13 +142,13 @@ const TaskList = () => {
         <div className="bg-white p-4 shadow-md rounded-lg mb-4">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-2xl text-gray-800">Task List</h2>
-            <div className="border-solid border-gray-400 border-2 rounded-lg w-1/4">
+            <div className="border-solid border-gray-400 border-2 rounded-lg w-1/4 flex items-center">
               <input
                 type="text"
                 className="bg-white h-10 w-full px-4 rounded-lg focus:outline-none hover:cursor-pointer"
                 placeholder="Search tasks"
                 onChange={(e) => setSearchInput(e.target.value)}
-              ></input>
+              ></input><SearchIcon className="mr-3 text-gray-500"/>
             </div>
             {isAdmin && (
             <button
@@ -222,28 +226,21 @@ const TaskList = () => {
                     <td className="px-4 py-2 whitespace-nowrap">
                       {task.task_status_name}
                     </td>
-                    <td className="px-4 py-2 whitespace-nowrap">
+                    <td className="px-4 py-2 whitespace-nowrap flex items-center justify-center">
                       <Link
                         to={`/tasks/${task.task_id}`}
                         className="text-blue-500 hover:underline hover:text-blue-700"
                       >
-                        More
+                        <InfoIcon />
                       </Link>
                       {isAdmin && (
-                        <>
-                      <Link
-                        to={""}
-                        className="text-gray-500 hover:underline hover:text-gray-700 ml-4"
-                      >
-                        Edit
-                      </Link>
-                      <button
+                        <div>
+                      <DeleteIcon
                         className="text-red-500 hover:underline hover:text-red-700 ml-4"
                         onClick={() => handleDelete(task.task_id)}
-                      >
-                        Delete
-                      </button>
-                      </> )}
+                      />
+                      </div>
+               )}
                     </td>
                   </tr>
                 ))}

@@ -24,8 +24,10 @@ function Home() {
       <div className="text-3xl mt-12 mb-12 text-sky-950 text-center"><Link to={`/`}>
         team.io
        </Link></div>
+       <hr className="mb-4 w-2/3 mx-auto"></hr>
       <div className="appContent text-center">
         <ProjectProgressPieChart />
+        <hr className="mb-4 w-2/3 mx-auto mt-4"></hr>
         <div className="container w-3/5 mx-auto mt-8 grid grid-cols-4 gap-4 md:grid-cols-4">
           <NavLink
             to="/employees"

@@ -114,7 +114,7 @@ export async function deleteTeam(teamId) {
   const [result] = await pool.query(
     `
         DELETE FROM Teams
-        WHERE team_id = ?
+        WHERE teams.team_id = ?
       `,
     [teamId]
   );
