@@ -11,21 +11,6 @@ const EmployeeDetails = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [positions, setPositions] = useState([]);
 
-  async function fetchEmployeePositions() {
-    try {
-      const positionData = await fetch(
-        `http://localhost:8080/employeepositions`
-      );
-      if (!positionData.ok) {
-      } else {
-        const data = await positionData.json();
-        setPositions(data);
-      }
-    } catch (error) {
-      console.error(error.message);
-    }
-  }
-
   async function fetchEmployeeData() {
     try {
       const employeesData = await fetch(
@@ -42,6 +27,23 @@ const EmployeeDetails = () => {
     }
   }
 
+
+  async function fetchEmployeePositions() {
+    try {
+      const positionData = await fetch(
+        `http://localhost:8080/employeepositions`
+      );
+      if (!positionData.ok) {
+      } else {
+        const data = await positionData.json();
+        setPositions(data);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+ 
   async function fetchTasksData() {
     try {
       const tasksData = await fetch(

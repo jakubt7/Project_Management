@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import TaskIcon from "@mui/icons-material/Task";
 import BadgeIcon from "@mui/icons-material/Badge";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import GroupsIcon from "@mui/icons-material/Groups";
-import { NavLink } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import ProjectProgressPieChart from "../../components/ProjectProgressChart/ProjectProgressChart";
 
 function Home() {
@@ -13,7 +11,6 @@ function Home() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-
     if (user) {
       setEmployeeName(user.employee_name);
     }
@@ -21,10 +18,10 @@ function Home() {
 
   return (
     <div className="app">
-      <div className="text-3xl mt-12 mb-12 text-sky-950 text-center"><Link to={`/`}>
-        team.io
-       </Link></div>
-       <hr className="mb-4 w-2/3 mx-auto"></hr>
+      <div className="text-3xl mt-12 mb-12 text-sky-950 text-center">
+        <Link to={`/`}>team.io</Link>
+      </div>
+      <hr className="mb-4 w-2/3 mx-auto"></hr>
       <div className="appContent text-center">
         <ProjectProgressPieChart />
         <hr className="mb-4 w-2/3 mx-auto mt-4"></hr>

@@ -4,7 +4,7 @@ import AddTaskModal from "../AddTaskModal/AddTaskModal";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import InfoIcon from "@mui/icons-material/Info";
 import DeleteIcon from "@mui/icons-material/Delete";
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
 
 const TaskList = () => {
   const [data, setData] = useState([]);
@@ -13,11 +13,9 @@ const TaskList = () => {
   const [activeColumn, setActiveColumn] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const [employeeId, setEmployeeId] = useState("");
-  
 
   const user = JSON.parse(localStorage.getItem("user"));
   const isAdmin = user && user.role === "admin";
-
 
   const sorting = (col) => {
     if (order === "ASC") {
@@ -71,12 +69,12 @@ const TaskList = () => {
     if (user) {
       setEmployeeId(user.employee_id);
     }
-  
+
     const fetchData = async () => {
       try {
         if (isAdmin) {
           const taskData = await fetch("http://localhost:8080/tasks");
-  
+
           if (taskData.ok) {
             const data = await taskData.json();
             setData(data);
@@ -84,8 +82,10 @@ const TaskList = () => {
             console.log("There was an error fetching from the API");
           }
         } else {
-          const taskData = await fetch(`http://localhost:8080/tasks/user/${employeeId}`);
-  
+          const taskData = await fetch(
+            `http://localhost:8080/tasks/user/${employeeId}`
+          );
+
           if (taskData.ok) {
             const task = await taskData.json();
             setData(task);
@@ -97,10 +97,9 @@ const TaskList = () => {
         console.error(error.message);
       }
     };
-  
+
     fetchData();
   }, [isAdmin, employeeId]);
-  
 
   const handleAddTask = async () => {
     fetchData();
@@ -135,7 +134,6 @@ const TaskList = () => {
     fetchData();
   };
 
-
   return (
     <div className="flex justify-center mt-5 mb-5">
       <div className="w-5/6">
@@ -148,15 +146,16 @@ const TaskList = () => {
                 className="bg-white h-10 w-full px-4 rounded-lg focus:outline-none hover:cursor-pointer"
                 placeholder="Search tasks"
                 onChange={(e) => setSearchInput(e.target.value)}
-              ></input><SearchIcon className="mr-3 text-gray-500"/>
+              ></input>
+              <SearchIcon className="mr-3 text-gray-500" />
             </div>
             {isAdmin && (
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="btn bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
-            >
-              Add Task
-            </button>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="btn bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
+              >
+                Add Task
+              </button>
             )}
           </div>
         </div>
@@ -235,12 +234,12 @@ const TaskList = () => {
                       </Link>
                       {isAdmin && (
                         <div>
-                      <DeleteIcon
-                        className="text-red-500 hover:underline hover:text-red-700 ml-4"
-                        onClick={() => handleDelete(task.task_id)}
-                      />
-                      </div>
-               )}
+                          <DeleteIcon
+                            className="text-red-500 hover:underline hover:text-red-700 ml-4"
+                            onClick={() => handleDelete(task.task_id)}
+                          />
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))}

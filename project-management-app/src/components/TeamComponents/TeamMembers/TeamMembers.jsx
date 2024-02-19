@@ -120,7 +120,7 @@ const TeamMembers = () => {
               />
               <div className="text-center">
                 <h2 className="font-medium text-gray-800 text-xl">
-                  {data.team_name}
+                  {/* {data.team_name} */}
                 </h2>
               </div>
               <div className="membersList flex justify-center items-center mt-2">
@@ -134,7 +134,7 @@ const TeamMembers = () => {
                         to={`/employees/${member.employee_id}`}
                         className="flex items-center w-full"
                       >
-                        <div className="bg-white hover:bg-slate-300 rounded-xl p-5 shadow-md flex">
+                        <div className="bg-gray-200 hover:bg-slate-300 rounded-xl p-5 shadow-md flex">
                           <img
                             src="https://picsum.photos/100/100"
                             alt={`${data.team_name}`}

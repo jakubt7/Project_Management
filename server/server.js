@@ -125,15 +125,7 @@ export async function deleteTeam(teamId) {
 ////////////////////////////////////////////
 // EMPLOYEE REQUESTS
 
-export async function getEmployees() {
-  const [rows] = await pool.query(`
-  SELECT * 
-  FROM Employees 
-  INNER JOIN employeepositions 
-  ON employees.employee_position = employeepositions.employee_position_id
-  ORDER BY employees.employee_id ASC`);
-  return rows;
-}
+
 
 export async function getEmployee(id) {
   const [rows] = await pool.query(
@@ -146,6 +138,16 @@ export async function getEmployee(id) {
     [id]
   );
   return rows[0];
+}
+
+export async function getEmployees() {
+  const [rows] = await pool.query(`
+  SELECT * 
+  FROM Employees 
+  INNER JOIN employeepositions 
+  ON employees.employee_position = employeepositions.employee_position_id
+  ORDER BY employees.employee_id ASC`);
+  return rows;
 }
 
 export async function createEmployee(name, lastname, position, email) {
@@ -167,15 +169,7 @@ export async function deleteEmployee(employeeId) {
       `,
     [employeeId]
   );
-
   return result.affectedRows === 1;
-}
-
-export async function getEmployeePositions() {
-  const [rows] = await pool.query(`
-  SELECT * 
-  FROM EmployeePositions `);
-  return rows;
 }
 
 export async function updateEmployee(
@@ -204,6 +198,13 @@ export async function updateEmployee(
     ]
   );
   return result.affectedRows;
+}
+
+export async function getEmployeePositions() {
+  const [rows] = await pool.query(`
+  SELECT * 
+  FROM EmployeePositions `);
+  return rows;
 }
 
 ////////////////////////////////////////////

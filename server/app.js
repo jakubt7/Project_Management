@@ -2,42 +2,12 @@ import express from "express";
 import cors from "cors";
 
 import {
-  getTeams,
-  getTeam,
-  createTeam,
-  getEmployees,
-  getEmployee,
-  createEmployee,
-  deleteEmployee,
-  updateEmployee,
-  getTasks,
-  getTask,
-  createTask,
-  getProjects,
-  getProject,
-  createProject,
-  getTeamMembers,
-  getTeamMember,
-  createTeamMember,
-  deleteProject,
-  getEmployeeTasks,
-  getEmployeeTeamMembership,
-  getProjectTasks,
-  getProjectTeams,
-  getTaskStatus,
-  deleteTask,
-  updateTask,
-  deleteTeamMember,
-  getProjectsStatuses,
-  updateProject,
-  getEmployeePositions,
-  handleLogin,
-  deleteTeam,
-  getTasksById,
-  updateTaskStatus,
-  getNotifications,
-  createNotification,
-  updateNotificationStatus,
+  getTeams, getTeam, createTeam, deleteTeam, 
+  getEmployees, getEmployee, createEmployee,  deleteEmployee,  updateEmployee, getEmployeeTasks, getEmployeeTeamMembership, getEmployeePositions,
+  getTasks, getTask,  createTask,  getTasksById,  updateTaskStatus, getTaskStatus, deleteTask, updateTask,
+  getProjects, getProject, createProject,  deleteProject, getProjectTasks,  getProjectTeams,  getProjectsStatuses,  updateProject,
+  getTeamMembers, getTeamMember,  createTeamMember, deleteTeamMember,
+  handleLogin, getNotifications, createNotification, updateNotificationStatus, 
 } from "./server.js";
 
 const app = express();
@@ -50,6 +20,21 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json());
+
+////////////////////////////////////////////
+// ERROR HANDLING
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke");
+});
+
+////////////////////////////////////////////
+// CONNECTION TO PORT ANNOUNCEMENT
+
+app.listen(8080, () => {
+  console.log("Server is running on port 8080");
+});
 
 // USER REQUESTS
 app.post("/check-user", async (req, res) => {
@@ -78,9 +63,7 @@ app.get("/notifications/:id", async (req, res) => {
 app.put("/notifications/update/:id", async (req, res) => {
   const id = req.params.id;
 
-  const notificationUpdate = await updateNotificationStatus(
-    id
-  );
+  const notificationUpdate = await updateNotificationStatus(id);
 
   if (notificationUpdate > 0) {
     res.send(`Notification with ID ${id} updated successfully`);
@@ -134,12 +117,6 @@ app.get("/employees/:id", async (req, res) => {
   res.send(employee);
 });
 
-app.get("/employees/tasks/:id", async (req, res) => {
-  const id = req.params.id;
-  const task = await getEmployeeTasks(id);
-  res.send(task);
-});
-
 app.post("/employees", async (req, res) => {
   const { name, lastname, position, email } = req.body;
   const employee = await createEmployee(name, lastname, position, email);
@@ -156,11 +133,6 @@ app.delete("/employees/delete/:id", async (req, res) => {
       .status(500)
       .send({ error: "Failed to delete employee.", message: error.message });
   }
-});
-
-app.get("/employeepositions", async (req, res) => {
-  const positions = await getEmployeePositions();
-  res.send(positions);
 });
 
 app.put("/employees/update/:id", async (req, res) => {
@@ -186,6 +158,17 @@ app.put("/employees/update/:id", async (req, res) => {
   } else {
     res.status(500).send(`Failed to update task with ID ${empId}`);
   }
+});
+
+app.get("/employees/tasks/:id", async (req, res) => {
+  const id = req.params.id;
+  const task = await getEmployeeTasks(id);
+  res.send(task);
+});
+
+app.get("/employeepositions", async (req, res) => {
+  const positions = await getEmployeePositions();
+  res.send(positions);
 });
 
 ////////////////////////////////////////////
@@ -267,16 +250,11 @@ app.put("/tasks/update/:id", async (req, res) => {
 });
 
 app.put("/tasks/update/status/:id", async (req, res) => {
-  const {
-    status,
-  } = req.body;
+  const { status } = req.body;
 
   const taskId = req.params.id;
 
-  const taskUpdate = await updateTaskStatus(
-    status,
-    taskId
-  );
+  const taskUpdate = await updateTaskStatus(status, taskId);
 
   if (taskUpdate > 0) {
     res.send(`Task with ID ${taskId} updated successfully`);
@@ -419,17 +397,3 @@ app.delete("/teammembers/delete/:id", async (req, res) => {
   }
 });
 
-////////////////////////////////////////////
-// ERROR HANDLING
-
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Something broke");
-});
-
-////////////////////////////////////////////
-// CONNECTION TO PORT ANNOUNCEMENT
-
-app.listen(8080, () => {
-  console.log("Server is running on port 8080");
-});

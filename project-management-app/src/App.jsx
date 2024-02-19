@@ -1,5 +1,4 @@
 import { Route, Routes, BrowserRouter} from 'react-router-dom'
-import './App.css'
 import Home from "./pages/Home/Home";
 import LoginPage from './pages/LoginPage/LoginPage';
 import Employees from './pages/Employees/Employees';
@@ -10,9 +9,6 @@ import Teams from './pages/Teams/Teams';
 import TeamMembers from './components/TeamComponents/TeamMembers/TeamMembers';
 import TaskDetails from './components/TaskComponents/TaskDetails/TaskDetails';
 import ProjectDetails from './components/ProjectComponents/ProjectDetails/ProjectDetails';
-
-
-
 
 function App() {
   return (
