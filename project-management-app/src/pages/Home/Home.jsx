@@ -1,22 +1,30 @@
-import React from "react";
-import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import React, { useEffect, useState } from "react";
 import TaskIcon from "@mui/icons-material/Task";
 import BadgeIcon from "@mui/icons-material/Badge";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import GroupsIcon from "@mui/icons-material/Groups";
-import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import { NavLink } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import ProjectProgressPieChart from "../../components/ProjectProgressChart/ProjectProgressChart";
 
 function Home() {
+  const [employeeName, setEmployeeName] = useState("");
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      setEmployeeName(user.employee_name);
+    }
+  }, []);
+
   return (
-    <div className="app text-center">
-      <div className="text-3xl mt-12 mb-12 text-sky-950"><Link to={`/`}>
-        team.io
-       </Link></div>
-      <div className="appContent">
+    <div className="app">
+      <div className="text-3xl mt-12 mb-12 text-sky-950 text-center">
+        <Link to={`/`}>team.io</Link>
+      </div>
+      <hr className="mb-4 w-2/3 mx-auto"></hr>
+      <div className="appContent text-center">
         <ProjectProgressPieChart />
+        <hr className="mb-4 w-2/3 mx-auto mt-4"></hr>
         <div className="container w-3/5 mx-auto mt-8 grid grid-cols-4 gap-4 md:grid-cols-4">
           <NavLink
             to="/employees"
@@ -55,6 +63,7 @@ function Home() {
             Teams
           </NavLink>
         </div>
+        <div className="text-2xl mt-8">Welcome back: {employeeName} </div>
       </div>
     </div>
   );

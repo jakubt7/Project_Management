@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./TaskDetails.scss";
 import { useParams } from "react-router-dom";
 import AppHeader from "../../AppHeader/AppHeader";
+import ChangeStatusModal from "../ChangeStatusModal/ChangeStatusModal";
 
 const TaskDetails = () => {
   const { taskId } = useParams();
@@ -14,6 +15,8 @@ const TaskDetails = () => {
   const [teams, setTeams] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [statuses, setStatuses] = useState([]);
+  const [isEditingStatus, setIsEditingStatus] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState(null);
 
   async function fetchStatuses() {
     try {
@@ -89,6 +92,11 @@ const TaskDetails = () => {
       console.error(error.message);
     }
   }
+
+  const handleUpdateStatus = () => {
+    setIsEditingStatus(false);
+    fetchData();
+  };
 
   useEffect(() => {
     fetchData();
@@ -168,6 +176,9 @@ const TaskDetails = () => {
     return date.toLocaleDateString("en-GB", options);
   }
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isAdmin = user && user.role === "admin";
+
   return (
     <div className="taskDetails">
       <AppHeader />
@@ -225,10 +236,7 @@ const TaskDetails = () => {
                       className="mt-1 p-2 border rounded-md w-full"
                     >
                       {teams.map((team) => (
-                        <option
-                          key={team.team_id}
-                          value={team.team_id}
-                        >
+                        <option key={team.team_id} value={team.team_id}>
                           {team.team_name}
                         </option>
                       ))}
@@ -247,7 +255,7 @@ const TaskDetails = () => {
                           key={employee.employee_id}
                           value={employee.employee_id}
                         >
-                          {employee.employee_name}{" "}{employee.employee_lastname}
+                          {employee.employee_name} {employee.employee_lastname}
                         </option>
                       ))}
                     </select>
@@ -290,24 +298,6 @@ const TaskDetails = () => {
                       className="mt-1 p-2 border rounded-md w-full"
                     />
                   </div>
-                  <div className="mb-4">
-                    <p className="text-lg">Employee:</p>
-                    <select
-                      value={editedTask.employee_id}
-                      onChange={handleInputChange}
-                      name="employee_id"
-                      className="mt-1 p-2 border rounded-md w-full"
-                    >
-                      {employees.map((employee) => (
-                        <option
-                          key={employee.employee_id}
-                          value={employee.employee_id}
-                        >
-                          {employee.employee_name}{" "}{employee.employee_lastname}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
                 </>
               ) : (
                 <>
@@ -335,42 +325,57 @@ const TaskDetails = () => {
                     <p className="text-lg">
                       End Date: {formatDate(editedTask.end_date)}
                     </p>
-                    <p className="text-lg">
-                      Employee: {editedTask.employee_name}{" "}
-                      {editedTask.employee_lastname}
-                    </p>
                   </div>
                 </>
               )}
             </div>
             <div className="flex justify-center mt-4">
               <div className="mr-5">
-                {isEditing ? (
+                {isAdmin && (
                   <>
-                    <button
-                      className="p-3 w-40 bg-black text-white rounded-lg mr-2"
-                      onClick={() => {
-                        setIsEditing(false);
-                        setEditedTask(data);
-                      }}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      className="p-3 w-40 bg-blue-500 text-white rounded-lg"
-                      onClick={handleEditTask}
-                    >
-                      Save
-                    </button>
+                    {isEditing ? (
+                      <>
+                        <button
+                          className="p-3 w-40 bg-black text-white rounded-lg mr-2"
+                          onClick={() => {
+                            setIsEditing(false);
+                            setEditedTask(data);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="p-3 w-40 bg-blue-500 text-white rounded-lg"
+                          onClick={handleEditTask}
+                        >
+                          Save
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        className="p-3 w-40 bg-blue-500 text-white rounded-lg"
+                        onClick={() => setIsEditing(true)}
+                      >
+                        Edit task
+                      </button>
+                    )}
                   </>
-                ) : (
-                  <button
-                    className="p-3 w-40 bg-blue-500 text-white rounded-lg"
-                    onClick={() => setIsEditing(true)}
-                  >
-                    Edit task
-                  </button>
                 )}
+                <button
+                  className="ml-5 p-3 w-40 bg-green-500 text-white rounded-lg"
+                  onClick={() => {
+                    setSelectedTaskId(taskId);
+                    setIsEditingStatus(true);
+                  }}
+                >
+                  Change status
+                </button>
+                <ChangeStatusModal
+                  isOpen={isEditingStatus}
+                  onClose={() => setIsEditingStatus(false)}
+                  taskId={selectedTaskId}
+                  onChangeStatus={handleUpdateStatus}
+                />
               </div>
             </div>
           </div>

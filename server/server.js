@@ -13,6 +13,71 @@ const pool = mysql
   .promise();
 
 ////////////////////////////////////////////
+// USER REQUESTS
+
+export async function handleLogin(req, res) {
+  const sql =
+    "SELECT * FROM users INNER JOIN Employees ON users.employee_id=employees.employee_id WHERE username = ? AND password = ?";
+  const [rows] = await pool.query(sql, [req.body.username, req.body.password]);
+
+  if (rows.length > 0) {
+    const user = rows[0];
+    return res.json({
+      message: "Login successful",
+      user: {
+        username: user.username,
+        role: user.role,
+        employee_name: user.employee_name,
+        employee_id: user.employee_id,
+      },
+    });
+  } else {
+    return res.json("Login unsuccessful");
+  }
+}
+
+////////////////////////////////////////////
+// NOTIFICATION REQUESTS
+export async function createNotification(employee, task) {
+  const [result] = await pool.query(
+    `
+    INSERT INTO Notifications (status_id, employee_id, task_id)
+    VALUES (1, ?, ?)
+    `,
+    [employee, task]
+  );
+  return result.insertId;
+}
+
+export async function getNotifications(id) {
+  const [rows] = await pool.query(
+    `
+    SELECT * 
+    FROM Notifications
+    INNER JOIN tasks ON notifications.task_id = tasks.task_id
+    INNER JOIN employees ON notifications.employee_id = employees.employee_id
+    INNER JOIN notification_status ON notifications.status_id = notification_status.status_id
+    INNER JOIN projects ON tasks.project_id = projects.project_id
+    WHERE notifications.employee_id = ? AND notifications.status_id = 1`,
+    [id]
+  );
+  return rows;
+}
+
+export async function updateNotificationStatus(id) {
+  const [result] = await pool.query(
+    `
+    UPDATE Notifications 
+    SET 
+    status_id = 2
+    WHERE notification_id = ?
+  `,
+    [id]
+  );
+  return result.affectedRows;
+}
+
+////////////////////////////////////////////
 // TEAM REQUESTS
 
 export async function getTeams() {
@@ -45,18 +110,22 @@ export async function createTeam(name) {
   return result.insertId;
 }
 
+export async function deleteTeam(teamId) {
+  const [result] = await pool.query(
+    `
+        DELETE FROM Teams
+        WHERE teams.team_id = ?
+      `,
+    [teamId]
+  );
+
+  return result.affectedRows === 1;
+}
+
 ////////////////////////////////////////////
 // EMPLOYEE REQUESTS
 
-export async function getEmployees() {
-  const [rows] = await pool.query(`
-  SELECT * 
-  FROM Employees 
-  INNER JOIN employeepositions 
-  ON employees.employee_position = employeepositions.employee_position_id
-  ORDER BY employees.employee_id ASC`);
-  return rows;
-}
+
 
 export async function getEmployee(id) {
   const [rows] = await pool.query(
@@ -69,6 +138,16 @@ export async function getEmployee(id) {
     [id]
   );
   return rows[0];
+}
+
+export async function getEmployees() {
+  const [rows] = await pool.query(`
+  SELECT * 
+  FROM Employees 
+  INNER JOIN employeepositions 
+  ON employees.employee_position = employeepositions.employee_position_id
+  ORDER BY employees.employee_id ASC`);
+  return rows;
 }
 
 export async function createEmployee(name, lastname, position, email) {
@@ -90,15 +169,7 @@ export async function deleteEmployee(employeeId) {
       `,
     [employeeId]
   );
-
   return result.affectedRows === 1;
-}
-
-export async function getEmployeePositions() {
-  const [rows] = await pool.query(`
-  SELECT * 
-  FROM EmployeePositions `);
-  return rows;
 }
 
 export async function updateEmployee(
@@ -129,6 +200,13 @@ export async function updateEmployee(
   return result.affectedRows;
 }
 
+export async function getEmployeePositions() {
+  const [rows] = await pool.query(`
+  SELECT * 
+  FROM EmployeePositions `);
+  return rows;
+}
+
 ////////////////////////////////////////////
 // TASK REQUESTS
 
@@ -137,9 +215,25 @@ export async function getTasks() {
     SELECT * 
     FROM Tasks
     INNER JOIN Projects ON tasks.project_id = projects.project_id
-    INNER JOIN Employees ON tasks.employee_id = employees.employee_id
+    INNER JOIN Employees ON tasks.assignee_id = employees.employee_id
     INNER JOIN TaskStatus ON tasks.status = taskstatus.task_status_id
     ORDER BY tasks.task_id ASC`);
+  return rows;
+}
+
+export async function getTasksById(id) {
+  const [rows] = await pool.query(
+    `
+    SELECT * 
+    FROM Tasks
+    INNER JOIN Projects ON tasks.project_id = projects.project_id
+    INNER JOIN Employees ON tasks.assignee_id = employees.employee_id
+    INNER JOIN TaskStatus ON tasks.status = taskstatus.task_status_id
+    WHERE assignee_id = ?
+    ORDER BY tasks.task_id ASC
+    `,
+    [id]
+  );
   return rows;
 }
 
@@ -167,7 +261,7 @@ export async function getEmployeeTasks(id) {
     `
     SELECT * 
     FROM Tasks 
-    WHERE employee_id = ?
+    WHERE assignee_id = ?
     ORDER BY tasks.task_id ASC`,
     [id]
   );
@@ -182,13 +276,12 @@ export async function createTask(
   assignee_id,
   status,
   start_date,
-  end_date,
-  employee_id
+  end_date
 ) {
   const [result] = await pool.query(
     `
-    INSERT INTO Tasks (task_name, task_description, project_id, team_id, assignee_id, status, start_date, end_date, employee_id)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO Tasks (task_name, task_description, project_id, team_id, assignee_id, status, start_date, end_date)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `,
     [
       name,
@@ -199,7 +292,6 @@ export async function createTask(
       status,
       start_date,
       end_date,
-      employee_id,
     ]
   );
   return result.insertId;
@@ -214,7 +306,6 @@ export async function updateTask(
   status,
   start_date,
   end_date,
-  employee_id,
   task_id
 ) {
   const [result] = await pool.query(
@@ -228,9 +319,8 @@ export async function updateTask(
       assignee_id = ?,
       status = ?,
       start_date = ?,
-      end_date = ?,
-      employee_id = ?
-    WHERE task_id = ?;
+      end_date = ?
+    WHERE task_id = ?
   `,
     [
       task_name,
@@ -241,9 +331,21 @@ export async function updateTask(
       status,
       start_date,
       end_date,
-      employee_id,
       task_id,
     ]
+  );
+  return result.affectedRows;
+}
+
+export async function updateTaskStatus(status, task_id) {
+  const [result] = await pool.query(
+    `
+    UPDATE tasks
+    SET
+    status = ?
+    WHERE task_id = ?
+  `,
+    [status, task_id]
   );
   return result.affectedRows;
 }

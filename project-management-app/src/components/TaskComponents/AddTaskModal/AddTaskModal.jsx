@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import Select from "../../Select/Select";
 
-const AddTaskModal = ({ isOpen, onClose, onAddTask, onAddTaskSuccess }) => {
+const AddTaskModal = ({ isOpen, onClose, onAddTask}) => {
   const nameRef = useRef();
   const descriptionRef = useRef();
   const projectRef = useRef();
@@ -10,12 +10,12 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask, onAddTaskSuccess }) => {
   const statusRef = useRef();
   const startRef = useRef();
   const endRef = useRef();
-  const employeeRef = useRef();
   const [isPending, setIsPending] = useState(false);
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     const name = nameRef.current.value;
     const description = descriptionRef.current.value;
     const project = projectRef.current.value;
@@ -24,8 +24,7 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask, onAddTaskSuccess }) => {
     const status = statusRef.current.value;
     const start = startRef.current.value;
     const end = endRef.current.value;
-    const employee = employeeRef.current.value;
-
+  
     const task = {
       name: name,
       description: description,
@@ -35,11 +34,10 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask, onAddTaskSuccess }) => {
       status: status,
       start_date: start,
       end_date: end,
-      employee_id: employee,
     };
-
+  
     setIsPending(true);
-
+  
     try {
       const response = await fetch("http://localhost:8080/tasks", {
         method: "POST",
@@ -48,9 +46,27 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask, onAddTaskSuccess }) => {
         },
         body: JSON.stringify(task),
       });
-
-      if (response.ok) {
-        console.log("Task added successfully");
+  
+      if (!response.ok) {
+        console.error("Unable to add a task");
+        return;
+      }
+  
+      const createdTask = await response.json();
+  
+      const notificationResponse = await fetch("http://localhost:8080/notifications/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          employee_id: assignee,
+          task_id: createdTask,
+        }),
+      });
+  
+      if (notificationResponse.ok) {
+        console.log("Task and Notification added successfully");
         nameRef.current.value = "";
         descriptionRef.current.value = "";
         projectRef.current.value = "";
@@ -59,12 +75,10 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask, onAddTaskSuccess }) => {
         statusRef.current.value = "";
         startRef.current.value = "";
         endRef.current.value = "";
-        employeeRef.current.value = "";
+  
         onAddTask();
-        onAddTaskSuccess(task);
-        console.log(task);
       } else {
-        console.error("Unable to add a task");
+        console.error("Unable to add a notification");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -156,14 +170,6 @@ const AddTaskModal = ({ isOpen, onClose, onAddTask, onAddTaskSuccess }) => {
                 ref={endRef}
                 required
                 className="w-full border rounded py-2 px-3 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              />
-              <Select
-                api="http://localhost:8080/employees"
-                label="Employee"
-                column="employee_name"
-                id="employee_id"
-                required
-                ref={employeeRef}
               />
               <div className="flex justify-center gap-6 mt-4">
                 <button
